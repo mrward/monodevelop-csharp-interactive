@@ -1,0 +1,16 @@
+﻿<ExtensionModel>
+	<Runtime>
+		<Import assembly="Mono.CSharp.dll" />
+		<Import assembly="MonoDevelop.CSharpInteractive.dll" />
+	</Runtime>
+
+	<Extension path="/MonoDevelop/Ide/Pads">
+		<Pad
+			id="MonoDevelop.CSharpInteractive.CSharpInteractivePad"
+			defaultPlacement="Center Bottom"
+			defaultStatus="AutoHide"
+			icon="md-console"
+			class="MonoDevelop.CSharpInteractive.CSharpInteractivePad"
+			_label="C# Interactive" />
+	</Extension>
+</ExtensionModel>
