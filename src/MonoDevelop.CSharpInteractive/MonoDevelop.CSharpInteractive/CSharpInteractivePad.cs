@@ -27,8 +27,10 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Gtk;
 using Mono.CSharp;
 using MonoDevelop.Components;
+using MonoDevelop.Components.Docking;
 using MonoDevelop.Core;
 using MonoDevelop.Core.ProgressMonitoring;
 using MonoDevelop.Ide;
@@ -52,9 +54,27 @@ namespace MonoDevelop.CSharpInteractive
 
 		protected override void Initialize (IPadWindow window)
 		{
+			CreateToolbar (window);
 			CreateEvaluator ();
 			InitializeEvaluator ();
 			CreateConsoleView ();
+		}
+
+		void CreateToolbar (IPadWindow window)
+		{
+			DockItemToolbar toolbar = window.GetToolbar (DockPositionType.Right);
+
+			var clearButton = new Button (new ImageView (Ide.Gui.Stock.Broom, IconSize.Menu));
+			clearButton.Clicked += ButtonClearClicked;
+			clearButton.TooltipText = GettextCatalog.GetString ("Clear");
+			toolbar.Add (clearButton);
+
+			toolbar.ShowAll ();
+		}
+
+		void ButtonClearClicked (object sender, EventArgs e)
+		{
+			view.Clear ();
 		}
 
 		void CreateConsoleView ()
