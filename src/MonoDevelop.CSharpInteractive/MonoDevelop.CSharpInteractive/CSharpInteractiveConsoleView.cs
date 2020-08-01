@@ -50,6 +50,8 @@ namespace MonoDevelop.CSharpInteractive
 			completionWidget = new CSharpInteractiveConsoleCompletionWidget (this);
 			completionWindow = new CompletionListWindow ();
 
+			UpdateInputLineBegin ();
+
 			TextView.KeyReleaseEvent += TextViewKeyReleaseEvent;
 		}
 
