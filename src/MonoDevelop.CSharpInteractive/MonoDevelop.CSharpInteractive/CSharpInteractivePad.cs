@@ -38,7 +38,7 @@ namespace MonoDevelop.CSharpInteractive
 {
 	class CSharpInteractivePad : PadContent
 	{
-		ConsoleView view;
+		CSharpInteractiveConsoleView view;
 		Evaluator evaluator;
 		LogTextWriter logTextWriter;
 
@@ -52,14 +52,14 @@ namespace MonoDevelop.CSharpInteractive
 
 		protected override void Initialize (IPadWindow window)
 		{
-			CreateConsoleView ();
 			CreateEvaluator ();
 			InitializeEvaluator ();
+			CreateConsoleView ();
 		}
 
 		void CreateConsoleView ()
 		{
-			view = new ConsoleView ();
+			view = new CSharpInteractiveConsoleView (evaluator);
 
 			OnCustomOutputPadFontChanged (null, EventArgs.Empty);
 

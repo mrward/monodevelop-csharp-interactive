@@ -42,6 +42,9 @@
     <Compile Include="MonoDevelop.CSharpInteractive\ConsoleOutputTextWriter.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\ConsoleViewReportPrinter.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractivePad.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveConsoleView.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveConsoleCompletionWidget.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive\CompletionListWindowExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />
