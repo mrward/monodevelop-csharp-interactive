@@ -90,13 +90,25 @@ namespace MonoDevelop.CSharpInteractive
 				}
 			}
 
-			if (key != Gdk.Key.Tab) {
+			if (IsDotCompletion (key)) {
+				Buffer.InsertAtCursor (".");
+			} else if (key != Gdk.Key.Tab) {
 				return base.ProcessKeyPressEvent (args);
 			}
 
-			int caretIndex = completionWidget.Position;
-			TriggerCompletion (InputLine, caretIndex);
+			TriggerCompletion (InputLine, completionWidget.Position);
 
+			return true;
+		}
+
+		bool IsDotCompletion (Gdk.Key key)
+		{
+			if (key != Gdk.Key.period || completionWindow.Visible) {
+				return false;
+			}
+
+			// TODO: Handle numbers like mono's REPL?
+			// https://github.com/mono/mono/blob/71307187cb1e9d8202d30fcaa1f5c4e4a66bc551/mcs/tools/csharp/getline.cs#L1060
 			return true;
 		}
 
