@@ -56,8 +56,9 @@ namespace MonoDevelop.CSharpInteractive
 		{
 			CreateToolbar (window);
 			CreateEvaluator ();
-			InitializeEvaluator ();
 			CreateConsoleView ();
+
+			InitializeEvaluator ();
 		}
 
 		void CreateToolbar (IPadWindow window)
@@ -79,6 +80,8 @@ namespace MonoDevelop.CSharpInteractive
 
 		void CreateConsoleView ()
 		{
+			Debug.Assert (evaluator != null);
+
 			view = new CSharpInteractiveConsoleView (evaluator);
 
 			OnCustomOutputPadFontChanged (null, EventArgs.Empty);
@@ -108,7 +111,7 @@ namespace MonoDevelop.CSharpInteractive
 			logTextWriter.TextWritten += LogTextWriterTextWritten;
 
 			var settings = new CompilerSettings ();
-			var printer = new ConsoleViewReportPrinter (view);
+			var printer = new ConsoleViewReportPrinter (logTextWriter);
 			var context = new CompilerContext (settings, printer);
 			evaluator = new Evaluator (context);
 			evaluator.DescribeTypeExpressions = true;
@@ -188,8 +191,8 @@ namespace MonoDevelop.CSharpInteractive
 					WriteLine ();
 				}
 			} catch (Exception ex) {
-				WriteLine (ex.Message);
 				Debug.WriteLine (ex.ToString ());
+
 				return null;
 			}
 

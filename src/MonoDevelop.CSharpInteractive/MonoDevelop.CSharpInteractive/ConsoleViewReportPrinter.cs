@@ -24,26 +24,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System.IO;
 using Mono.CSharp;
-using MonoDevelop.Components;
-using MonoDevelop.Core;
-
 namespace MonoDevelop.CSharpInteractive
 {
 	class ConsoleViewReportPrinter : ReportPrinter
 	{
-		ConsoleView view;
+		TextWriter outputWriter;
 
-		public ConsoleViewReportPrinter (ConsoleView view)
+		public ConsoleViewReportPrinter (TextWriter outputWriter)
 		{
-			this.view = view;
+			this.outputWriter = outputWriter;
 		}
 
 		public override void Print (AbstractMessage msg, bool showFullPath)
 		{
-			Runtime.RunInMainThread(() => {
-				view.WriteOutput(msg.Text);
-			});
+			base.Print (msg, outputWriter, showFullPath);
 		}
 	}
 }
