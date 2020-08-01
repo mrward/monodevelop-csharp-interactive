@@ -42,6 +42,8 @@ namespace MonoDevelop.CSharpInteractive
 
 		public static Evaluator Evaluator;
 
+		internal static Action OnClear = () => { };
+
 		public static string help =
 			"Static methods:\n" +
 			"  Describe(object);       - Describes the object's type\n" +
@@ -50,7 +52,8 @@ namespace MonoDevelop.CSharpInteractive
 			"  ShowUsing();            - Show active using declarations.\n" +
 			"  Time(() => { });        - Times the specified code\n" +
 			"  print(obj);             - Shorthand for Console.WriteLine\n" +
-			"  help;                    - This help text\n";
+			"  clear();                - Clears the output\n" +
+			"  help;                   - This help text\n";
 
 		public static void ShowVars ()
 		{
@@ -95,6 +98,11 @@ namespace MonoDevelop.CSharpInteractive
 			StringWriter stringWriter = new StringWriter ();
 			new Outline (t, stringWriter, declared_only: true, show_private: false, filter_obsolete: false).OutlineType ();
 			return stringWriter.ToString ();
+		}
+
+		public static void clear ()
+		{
+			OnClear ();
 		}
 	}
 }

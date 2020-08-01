@@ -118,6 +118,14 @@ namespace MonoDevelop.CSharpInteractive
 			CSharpInteractiveBase.Output = logTextWriter;
 			CSharpInteractiveBase.Error = logTextWriter;
 			CSharpInteractiveBase.Evaluator = evaluator;
+			CSharpInteractiveBase.OnClear = OnClear;
+		}
+
+		void OnClear ()
+		{
+			Runtime.RunInMainThread (() => {
+				view.ClearWithoutPrompt ();
+			});
 		}
 
 		/// <summary>

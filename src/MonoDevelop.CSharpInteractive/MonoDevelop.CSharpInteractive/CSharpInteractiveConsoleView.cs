@@ -26,6 +26,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using Gdk;
 using Gtk;
 using Mono.CSharp;
@@ -186,6 +187,20 @@ namespace MonoDevelop.CSharpInteractive
 		{
 			completionWidget?.OnUpdateInputLineBegin ();
 			base.UpdateInputLineBegin ();
+		}
+
+		public void ClearWithoutPrompt ()
+		{
+			Buffer.Text = string.Empty;
+
+			// HACK: Clear scriptLines string. This is done in ConsoleView's Clear method but we do
+			// not want a prompt to be displayed. Should investigate to see if Clear can be called
+			// instead and fix whatever the problem was with the prompt.
+			var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+			FieldInfo field = typeof (ConsoleView).GetField ("scriptLines", flags);
+			if (field != null) {
+				field.SetValue (this, string.Empty);
+			}
 		}
 	}
 }
