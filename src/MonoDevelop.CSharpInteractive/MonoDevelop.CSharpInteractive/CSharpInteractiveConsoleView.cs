@@ -49,6 +49,8 @@ namespace MonoDevelop.CSharpInteractive
 
 			completionWidget = new CSharpInteractiveConsoleCompletionWidget (this);
 			completionWindow = new CompletionListWindow ();
+
+			TextView.KeyReleaseEvent += TextViewKeyReleaseEvent;
 		}
 
 		/// <summary>
