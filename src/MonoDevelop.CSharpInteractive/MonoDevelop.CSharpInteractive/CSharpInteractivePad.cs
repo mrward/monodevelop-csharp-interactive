@@ -114,9 +114,10 @@ namespace MonoDevelop.CSharpInteractive
 			evaluator.DescribeTypeExpressions = true;
 			evaluator.WaitOnTask = true;
 
-			evaluator.InteractiveBaseClass = typeof (InteractiveBase);
-			InteractiveBase.Output = logTextWriter;
-			InteractiveBase.Error = logTextWriter;
+			evaluator.InteractiveBaseClass = typeof (CSharpInteractiveBase);
+			CSharpInteractiveBase.Output = logTextWriter;
+			CSharpInteractiveBase.Error = logTextWriter;
+			CSharpInteractiveBase.Evaluator = evaluator;
 		}
 
 		/// <summary>

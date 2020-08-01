@@ -45,6 +45,7 @@
     <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveConsoleView.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveConsoleCompletionWidget.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\CompletionListWindowExtensions.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />
