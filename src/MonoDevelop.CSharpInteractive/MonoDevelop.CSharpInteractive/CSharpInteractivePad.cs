@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Mono.CSharp;
 using MonoDevelop.Components;
@@ -159,6 +160,7 @@ namespace MonoDevelop.CSharpInteractive
 				}
 			} catch (Exception ex) {
 				WriteLine (ex.Message);
+				Debug.WriteLine (ex.ToString ());
 				return null;
 			}
 
