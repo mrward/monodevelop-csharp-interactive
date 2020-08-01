@@ -53,6 +53,7 @@ namespace MonoDevelop.CSharpInteractive
 		{
 			CreateConsoleView ();
 			CreateEvaluator ();
+			InitializeEvaluator ();
 		}
 
 		void CreateConsoleView ()
@@ -95,6 +96,14 @@ namespace MonoDevelop.CSharpInteractive
 			evaluator.InteractiveBaseClass = typeof (InteractiveBase);
 			InteractiveBase.Output = logTextWriter;
 			InteractiveBase.Error = logTextWriter;
+		}
+
+		/// <summary>
+		/// Match what 'csharp' does on mono.
+		/// </summary>
+		void InitializeEvaluator ()
+		{
+			Evaluate ("using System; using System.Linq; using System.Collections.Generic; using System.Collections;");
 		}
 
 		string expression = null;
