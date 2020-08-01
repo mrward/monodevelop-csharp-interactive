@@ -94,13 +94,14 @@ namespace MonoDevelop.CSharpInteractive
 				}
 			}
 
-			if (IsDotCompletion (key)) {
+			bool dotCompletion = IsDotCompletion (key);
+			if (dotCompletion) {
 				Buffer.InsertAtCursor (".");
 			} else if (key != Gdk.Key.Tab) {
 				return base.ProcessKeyPressEvent (args);
 			}
 
-			TriggerCompletion (InputLine, completionWidget.Position);
+			TriggerCompletion (InputLine, completionWidget.Position, autoComplete: !dotCompletion);
 
 			return true;
 		}
@@ -116,7 +117,7 @@ namespace MonoDevelop.CSharpInteractive
 			return true;
 		}
 
-		void TriggerCompletion (string line, int caretIndex)
+		void TriggerCompletion (string line, int caretIndex, bool autoComplete)
 		{
 			string textToComplete = line.Substring (0, caretIndex);
 			string[] completions = TryGetCompletions (textToComplete, out string prefix);
@@ -124,7 +125,7 @@ namespace MonoDevelop.CSharpInteractive
 				return;
 			}
 
-			if (completions.Length == 1) {
+			if (completions.Length == 1 && autoComplete) {
 				CompleteText (completions [0], prefix, caretIndex);
 				return;
 			}
