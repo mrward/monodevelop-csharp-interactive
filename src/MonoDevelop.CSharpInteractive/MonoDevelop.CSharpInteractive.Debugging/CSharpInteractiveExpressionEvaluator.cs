@@ -1,10 +1,10 @@
-//
-// AddinInfo.cs
+﻿//
+// CSharpInteractiveExpressionEvaluator.cs
 //
 // Author:
 //       Matt Ward <matt.ward@microsoft.com>
 //
-// Copyright (c) 2020 Microsoft
+// Copyright (c) 2020 Microsoft Corporation
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Mono.Addins;
+using Mono.Debugging.Client;
+using Mono.Debugging.Evaluation;
 
-[assembly:Addin (
-	"CSharpInteractive",
-	Namespace = "MonoDevelop",
-	Version = "0.1",
-	Category = "IDE extensions")]
-
-[assembly:AddinName ("CSharp Interactive")]
-[assembly:AddinDescription ("")]
-
-[assembly:AddinDependency ("Core", "8.4")]
-[assembly:AddinDependency ("Ide", "8.4")]
-[assembly:AddinDependency ("Debugger", "8.4")]
-
+namespace MonoDevelop.CSharpInteractive.Debugging
+{
+	class CSharpInteractiveExpressionEvaluator : ExpressionEvaluator
+	{
+		public override string Resolve (DebuggerSession session, SourceLocation location, string exp)
+		{
+			return exp;
+		}
+	}
+}

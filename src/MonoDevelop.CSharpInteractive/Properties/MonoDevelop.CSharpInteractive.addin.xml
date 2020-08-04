@@ -12,5 +12,12 @@
 			icon="md-console"
 			class="MonoDevelop.CSharpInteractive.CSharpInteractivePad"
 			_label="C# Interactive" />
+		<Pad
+			id="MonoDevelop.CSharpInteractive..ObjectInspectorPad"
+			defaultPlacement="Center Bottom"
+			defaultStatus="AutoHide"
+			icon="md-view-debug-watch"
+			class="MonoDevelop.CSharpInteractive.Debugging.ObjectInspectorPad"
+			_label="Object Inspector" />
 	</Extension>
 </ExtensionModel>

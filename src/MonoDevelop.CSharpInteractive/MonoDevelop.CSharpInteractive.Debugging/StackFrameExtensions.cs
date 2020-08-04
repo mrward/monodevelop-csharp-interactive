@@ -1,10 +1,10 @@
-//
-// AddinInfo.cs
+﻿//
+// StackFrameExtensions.cs
 //
 // Author:
 //       Matt Ward <matt.ward@microsoft.com>
 //
-// Copyright (c) 2020 Microsoft
+// Copyright (c) 2020 Microsoft Corporation
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Mono.Addins;
+using System.Reflection;
+using Mono.Debugging.Client;
 
-[assembly:Addin (
-	"CSharpInteractive",
-	Namespace = "MonoDevelop",
-	Version = "0.1",
-	Category = "IDE extensions")]
+namespace MonoDevelop.CSharpInteractive.Debugging
+{
+	static class StackFrameExtensions
+	{
+		public static void Attach (this StackFrame frame, DebuggerSession session)
+		{
+			var flags = BindingFlags.NonPublic | BindingFlags.Instance;
+			var method = typeof (StackFrame).GetMethod ("Attach", flags);
+			method.Invoke (frame, new object[] { session });
+		}
 
-[assembly:AddinName ("CSharp Interactive")]
-[assembly:AddinDescription ("")]
-
-[assembly:AddinDependency ("Core", "8.4")]
-[assembly:AddinDependency ("Ide", "8.4")]
-[assembly:AddinDependency ("Debugger", "8.4")]
-
+		public static void ConnectCallbacks (this StackFrame frame, ObjectValue value)
+		{
+			var flags = BindingFlags.NonPublic | BindingFlags.Static;
+			var method = typeof (ObjectValue).GetMethod ("ConnectCallbacks", flags);
+			var parameters = new object[] {
+				frame,
+				new ObjectValue[] { value }
+			};
+			method.Invoke (null, parameters);
+		}
+	}
+}

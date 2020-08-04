@@ -44,9 +44,12 @@ namespace MonoDevelop.CSharpInteractive
 
 		internal static Action OnClear = () => { };
 
+		internal static Action<object> OnInspect = obj => { };
+
 		public static string help =
 			"Static methods:\n" +
 			"  Describe(object);       - Describes the object's type\n" +
+			"  Inpect(object);         - Displays object in Object Inspector\n" +
 			"  LoadAssembly(assembly); - Loads the given assembly (like -r:ASSEMBLY)\n" +
 			"  ShowVars();             - Shows defined local variables.\n" +
 			"  ShowUsing();            - Show active using declarations.\n" +
@@ -103,6 +106,11 @@ namespace MonoDevelop.CSharpInteractive
 		public static void clear ()
 		{
 			OnClear ();
+		}
+
+		public static void Inspect (object obj)
+		{
+			OnInspect (obj);
 		}
 	}
 }

@@ -33,6 +33,7 @@ using MonoDevelop.Components;
 using MonoDevelop.Components.Docking;
 using MonoDevelop.Core;
 using MonoDevelop.Core.ProgressMonitoring;
+using MonoDevelop.CSharpInteractive.Debugging;
 using MonoDevelop.Ide;
 using MonoDevelop.Ide.Gui;
 
@@ -122,6 +123,7 @@ namespace MonoDevelop.CSharpInteractive
 			CSharpInteractiveBase.Error = logTextWriter;
 			CSharpInteractiveBase.Evaluator = evaluator;
 			CSharpInteractiveBase.OnClear = OnClear;
+			CSharpInteractiveBase.OnInspect = OnInspect;
 		}
 
 		void OnClear ()
@@ -209,6 +211,20 @@ namespace MonoDevelop.CSharpInteractive
 		void WriteLine ()
 		{
 			WriteLine (string.Empty);
+		}
+
+		void OnInspect (object obj)
+		{
+			var value = ObjectValueCreator.Create (obj);
+
+			Runtime.RunInMainThread(() => {
+				Pad pad = IdeApp.Workbench.GetPad<ObjectInspectorPad> ();
+
+				var objectInspectorPad = (ObjectInspectorPad)pad.Content;
+				objectInspectorPad.Inspect (value);
+
+				pad.BringToFront ();
+			}).Ignore();
 		}
 	}
 }

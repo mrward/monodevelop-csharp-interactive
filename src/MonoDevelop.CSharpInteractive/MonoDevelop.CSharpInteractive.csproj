@@ -46,6 +46,18 @@
     <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveConsoleCompletionWidget.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\CompletionListWindowExtensions.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveBase.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectInspectorPad.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectValueCreator.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\StackFrameExtensions.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveDebuggerSession.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveExpressionEvaluator.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveObjectValueAdapter.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveObjectValueSource.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ArrayAdapter.cs" />
+    <Compile Include="Mono.Debugging.Soft\MemberResolver.cs" />
+    <Compile Include="Mono.Debugging.Soft\FieldValueReference.cs" />
+    <Compile Include="Mono.Debugging.Soft\FieldReferenceBatch.cs" />
+    <Compile Include="Mono.Debugging.Soft\PropertyValueReference.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />
