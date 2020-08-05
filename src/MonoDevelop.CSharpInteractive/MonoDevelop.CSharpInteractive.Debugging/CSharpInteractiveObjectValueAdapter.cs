@@ -25,7 +25,10 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using Mono.Debugging.Evaluation;
 using Mono.Debugging.Soft;
@@ -71,7 +74,11 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 
 		public override object GetType (EvaluationContext ctx, string name, object[] typeArgs)
 		{
-			throw new System.NotImplementedException ();
+			switch (name) {
+				case "System.Diagnostics.DebuggerTypeProxyAttribute":
+					return typeof (DebuggerTypeProxyAttribute);
+			}
+			return null;
 		}
 
 		public override object[] GetTypeArgs (EvaluationContext ctx, object type)
@@ -149,6 +156,26 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 
 		public override object RuntimeInvoke (EvaluationContext ctx, object targetType, object target, string methodName, object[] genericTypeArgs, object[] argTypes, object[] argValues)
 		{
+			switch (methodName) {
+				case "GetEnumerator":
+					if ((Type)targetType == typeof(IEnumerable) &&
+						genericTypeArgs == null &&
+						argTypes?.Length == 0 &&
+						argValues?.Length == 0 &&
+						target is IEnumerable enumerable) {
+						return enumerable.GetEnumerator ();
+					}
+					break;
+				case "MoveNext":
+					if ((Type)targetType == typeof(IEnumerator) &&
+						genericTypeArgs == null &&
+						argTypes?.Length == 0 &&
+						argValues?.Length == 0 &&
+						target is IEnumerator enumerator) {
+						return enumerator.MoveNext ();
+					}
+					break;
+			}
 			throw new System.NotImplementedException ();
 		}
 
@@ -173,6 +200,12 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 			return GetMembers (ctx, null, t, co, bindingFlags);
 		}
 
+		protected override ValueReference GetMember (EvaluationContext ctx, object t, object co, string name)
+		{
+			var resolver = new MemberResolver ();
+			return resolver.GetMember (ctx, null, t, co, name);
+		}
+
 		public override object TargetObjectToObject (EvaluationContext ctx, object obj)
 		{
 			Type type = obj?.GetType ();
@@ -186,6 +219,34 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 				}
 			}
 			return base.TargetObjectToObject (ctx, obj);
+		}
+
+		public override IEnumerable<object> GetNestedTypes (EvaluationContext ctx, object type)
+		{
+			var asType = type as Type;
+			if (asType != null) {
+				foreach (Type nested in asType.GetNestedTypes ()) {
+					if (!nested.IsGenericType ()) {
+						yield return nested;
+					}
+				}
+			}
+		}
+
+		public override IEnumerable<object> GetImplementedInterfaces (EvaluationContext ctx, object type)
+		{
+			var asType = type as Type;
+			if (asType != null) {
+				foreach (Type nested in asType.GetInterfaces ()) {
+					yield return nested;
+				}
+			}
+		}
+
+		protected override TypeDisplayData OnGetTypeDisplayData (EvaluationContext ctx, object type)
+		{
+			var asType = type as Type;
+			return asType.GetTypeDisplayData ();
 		}
 	}
 }

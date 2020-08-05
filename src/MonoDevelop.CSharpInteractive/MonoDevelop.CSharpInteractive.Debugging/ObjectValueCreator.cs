@@ -40,7 +40,7 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 		{
 			var sessionOptions = DebuggingService.GetUserOptions ();
 			var options = sessionOptions.EvaluationOptions;
-			var context = new EvaluationContext (options);
+			var context = new CSharpInteractiveEvaluationContext (options);
 			context.Adapter = objectValueAdapter;
 			context.Evaluator = new CSharpInteractiveExpressionEvaluator ();
 

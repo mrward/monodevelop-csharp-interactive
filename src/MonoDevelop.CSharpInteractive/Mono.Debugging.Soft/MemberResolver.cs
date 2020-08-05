@@ -31,6 +31,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Mono.Debugging.Client;
 using Mono.Debugging.Evaluation;
 
@@ -132,6 +133,29 @@ namespace Mono.Debugging.Soft
 
 				type = type.BaseType;
 			}
+
+			type = t as Type;
+			if (type == null ||
+				!hasExplicitInterface ||
+				(bindingFlags & BindingFlags.Instance) == 0 ||
+				(bindingFlags & BindingFlags.Public) == 0) {
+				yield break;
+			}
+
+			var interfaces = type.GetInterfaces ();
+			foreach (Type intr in interfaces) {
+				var map = type.GetInterfaceMap (intr);
+				foreach (PropertyInfo prop in intr.GetProperties (bindingFlags)) {
+					var getter = prop.GetGetMethod (true);
+					if (getter == null || getter.GetParameters ().Length != 0)
+						continue;
+					var implementationGetter = map.TargetMethods[Array.IndexOf (map.InterfaceMethods, getter)];
+					//We are only intersted into private(explicit) implementations because public ones are already handled before
+					if (implementationGetter.IsPublic)
+						continue;
+					yield return new PropertyValueReference (ctx, prop, value, type, getter, null);
+				}
+			}
 		}
 
 		public static object GetValueType (object value)
@@ -173,6 +197,84 @@ namespace Mono.Debugging.Soft
 				return tupleNames[tupleIndex - 1];
 
 			return name;
+		}
+
+		public ValueReference GetMember (
+			EvaluationContext ctx,
+			IObjectSource objectSource,
+			object t,
+			object value,
+			string name)
+		{
+			var type = t as Type;
+			var tupleNames = GetTupleElementNames (objectSource, ctx);
+			while (type != null) {
+				var field = FindByName (type.GetFields (), f => MapTupleName (f.Name, tupleNames), name, ctx.CaseSensitive);
+
+				if (field != null && (field.IsStatic || value != null))
+					return new FieldValueReference (ctx, field, value, type);
+
+				var prop = FindByName (type.GetProperties (), p => p.Name, name, ctx.CaseSensitive);
+
+				if (prop != null && (IsStatic (prop) || value != null)) {
+					var getter = prop.GetGetMethod (true);
+					// Optimization: if the property has a CompilerGenerated backing field, use that instead.
+					// This way we avoid overhead of invoking methods on the debugee when the value is requested.
+					//But also check that this method is not virtual, because in that case we need to call getter to invoke override
+					if (!getter.IsVirtual) {
+						var cgFieldName = string.Format ("<{0}>{1}", prop.Name, type.IsAnonymousType () ? "" : "k__BackingField");
+						if ((field = FindByName (type.GetFields (), f => f.Name, cgFieldName, true)) != null && IsCompilerGenerated (field))
+							return new FieldValueReference (ctx, field, value, type, prop.Name, ObjectValueFlags.Property);
+					}
+					// Backing field not available, so do things the old fashioned way.
+					return getter != null ? new PropertyValueReference (ctx, prop, value, type, getter, null) : null;
+				}
+				if (type.IsInterface) {
+					foreach (var inteface in type.GetInterfaces ()) {
+						var result = GetMember (ctx, null, inteface, value, name);
+						if (result != null)
+							return result;
+					}
+					//foreach above recursively checked all "base" interfaces
+					//nothing was found, quit, otherwise we would loop forever
+					return null;
+				}
+
+				type = type.BaseType;
+			}
+
+			return null;
+		}
+
+		static bool IsStatic (PropertyInfo prop)
+		{
+			var method = prop.GetGetMethod (true) ?? prop.GetSetMethod (true);
+			return method.IsStatic;
+		}
+
+		static bool IsCompilerGenerated (FieldInfo field)
+		{
+			var attrs = field.GetCustomAttributes (true);
+			var generated = TypeExtensions.GetAttribute<CompilerGeneratedAttribute> (attrs);
+
+			return generated != null;
+		}
+
+		static T FindByName<T> (IEnumerable<T> items, Func<T, string> getName, string name, bool caseSensitive)
+		{
+			var best = default (T);
+
+			foreach (var item in items) {
+				var itemName = getName (item);
+
+				if (itemName == name)
+					return item;
+
+				if (!caseSensitive && itemName.Equals (name, StringComparison.CurrentCultureIgnoreCase))
+					best = item;
+			}
+
+			return best;
 		}
 	}
 }

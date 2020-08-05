@@ -58,6 +58,8 @@
     <Compile Include="Mono.Debugging.Soft\FieldValueReference.cs" />
     <Compile Include="Mono.Debugging.Soft\FieldReferenceBatch.cs" />
     <Compile Include="Mono.Debugging.Soft\PropertyValueReference.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveEvaluationContext.cs" />
+    <Compile Include="Mono.Debugging.Soft\TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />
