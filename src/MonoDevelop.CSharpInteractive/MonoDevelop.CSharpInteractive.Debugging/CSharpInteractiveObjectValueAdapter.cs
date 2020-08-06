@@ -138,8 +138,26 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 
 		public override bool IsPrimitive (EvaluationContext ctx, object val)
 		{
-			Type type = val?.GetType ();
-			return type?.IsPrimitive == true;
+			if (val == null) {
+				return false;
+			}
+
+			if (val is string) {
+				return true;
+			}
+
+			Type type = val.GetType ();
+			if (type.IsPrimitive) {
+				return true;
+			}
+
+			if (type.IsValueType &&
+				type.Namespace == "System" &&
+				(type.Name == "nfloat" || type.Name == "nint")) {
+				return true;
+			}
+
+			return false;
 		}
 
 		public override bool IsString (EvaluationContext ctx, object val)
