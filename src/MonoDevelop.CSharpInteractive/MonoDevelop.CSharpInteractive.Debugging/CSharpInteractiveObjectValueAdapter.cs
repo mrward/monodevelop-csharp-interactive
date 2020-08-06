@@ -63,7 +63,10 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 
 		public override object CreateValue (EvaluationContext ctx, object type, params object[] args)
 		{
-			throw new System.NotImplementedException ();
+			if (type is Type asType) {
+				return Activator.CreateInstance (asType, args);
+			}
+			return null;
 		}
 
 		public override object GetBaseType (EvaluationContext ctx, object type)
@@ -72,18 +75,46 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 			return asType?.BaseType;
 		}
 
+		protected override object GetBaseTypeWithAttribute (EvaluationContext ctx, object type, object attrType)
+		{
+			var attributeAsType = attrType as Type;
+			var asType = type as Type;
+
+			while (asType != null) {
+				if (asType.GetCustomAttributes (attributeAsType, false).Any ()) {
+					return asType;
+				}
+				asType = asType.BaseType;
+			}
+
+			return null;
+		}
+
 		public override object GetType (EvaluationContext ctx, string name, object[] typeArgs)
 		{
 			switch (name) {
 				case "System.Diagnostics.DebuggerTypeProxyAttribute":
 					return typeof (DebuggerTypeProxyAttribute);
 			}
+
+			string fullName = QualifiedTypeName.GetName (name, typeArgs);
+			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+				Type type = assembly.GetType (fullName, false, false);
+				if (type != null) {
+					return type;
+				}
+			}
+
 			return null;
 		}
 
 		public override object[] GetTypeArgs (EvaluationContext ctx, object type)
 		{
-			throw new System.NotImplementedException ();
+			var asType = type as Type;
+			if (asType != null) {
+				return asType.GetGenericArguments();
+			}
+			return Array.Empty<object>();
 		}
 
 		public override string GetTypeName (EvaluationContext ctx, object type)
