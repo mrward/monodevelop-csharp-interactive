@@ -164,8 +164,12 @@ namespace Mono.Debugging.Soft
 				//}
 			}
 			set {
-				//if (obj == null)
-				//	declaringType.SetValue (field, (Value)value);
+				if (obj == null) {
+					//field.SetValue ()
+					//	declaringType.SetValue (field, (Value)value);
+				} else {
+					field.SetValue (obj, value);
+				}
 				//else if (obj is ObjectMirror) {
 				//	if (batch != null)
 				//		batch.Invalidate ();

@@ -49,7 +49,7 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 		public ObjectInspectorPad ()
 		{
 			controller = new ObjectValueTreeViewController ();
-			controller.AllowEditing = false;
+			controller.AllowEditing = true;
 
 			treeView = controller.GetMacControl (ObjectValueTreeViewFlags.ObjectValuePadFlags);
 

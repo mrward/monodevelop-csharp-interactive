@@ -50,5 +50,10 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 		}
 
 		public override ObjectValueFlags Flags => ObjectValueFlags.None;
+
+		public override void SetValue (EvaluationContext ctx, object value)
+		{
+			base.SetValue (ctx, value);
+		}
 	}
 }

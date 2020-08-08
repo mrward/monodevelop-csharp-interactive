@@ -46,7 +46,9 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 			var source = new CSharpInteractiveObjectValueSource (path.Join ("."), obj, context);
 
 			try {
-				ObjectValue value = objectValueAdapter.CreateObjectValue (context, source, path, obj, ObjectValueFlags.None);
+				// Cannot update top level value types from the REPL so mark the top level objects as read-only.
+				var flags = ObjectValueFlags.ReadOnly;
+				ObjectValue value = objectValueAdapter.CreateObjectValue (context, source, path, obj, flags);
 				AttachStackFrame (value, sessionOptions);
 				return value;
 			} catch (Exception ex) {
@@ -63,14 +65,6 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 
 			stackFrame.Attach (session);
 			stackFrame.ConnectCallbacks (value);
-		}
-
-		static ObjectPath GetObjectPath (Type type)
-		{
-			if (type == null)
-				return new ObjectPath ("null");
-
-			return new ObjectPath (type.Name);
 		}
 	}
 }

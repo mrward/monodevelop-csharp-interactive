@@ -24,8 +24,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
+using System.Diagnostics;
 using Mono.Debugging.Client;
 using Mono.Debugging.Evaluation;
+using MonoDevelop.Core;
 
 namespace MonoDevelop.CSharpInteractive.Debugging
 {
@@ -37,5 +40,15 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 		}
 
 		public override bool SupportIEnumerable => true;
+
+		public override void WriteDebuggerError (Exception ex)
+		{
+			LoggingService.LogError ("Debugger error", ex);
+		}
+
+		public override void WriteDebuggerOutput (string message, params object[] values)
+		{
+			Debug.WriteLine (string.Format (message, values));
+		}
 	}
 }

@@ -131,7 +131,6 @@ namespace Mono.Debugging.Soft
 					throw new EvaluatorException ("This property is not safe to evaluate.");
 
 				value = getter.Invoke (obj ?? declaringType, indexerArgs);
-				//value = ((SoftEvaluationContext)ctx).RuntimeInvoke (getter, obj ?? declaringType, indexerArgs);
 				haveValue = true;
 			}
 
@@ -140,25 +139,25 @@ namespace Mono.Debugging.Soft
 
 		public override void SetValue (EvaluationContext ctx, object value)
 		{
-			//ctx.AssertTargetInvokeAllowed ();
+			ctx.AssertTargetInvokeAllowed ();
 
-			//var args = new Value[indexerArgs != null ? indexerArgs.Length + 1 : 1];
-			//if (indexerArgs != null)
-			//	indexerArgs.CopyTo (args, 0);
+			var args = new object [indexerArgs != null ? indexerArgs.Length + 1 : 1];
+			if (indexerArgs != null)
+				indexerArgs.CopyTo (args, 0);
 
-			//args[args.Length - 1] = (Value)value;
+			args [args.Length - 1] = value;
 
-			//var setter = property.GetSetMethod (true);
-			//if (setter == null)
-			//	throw new EvaluatorException ("Property is read-only");
+			var setter = property.GetSetMethod (true);
+			if (setter == null)
+				throw new EvaluatorException ("Property is read-only");
 
-			//this.value = null;
-			//haveValue = false;
+			this.value = null;
+			haveValue = false;
 
-			//((SoftEvaluationContext)ctx).RuntimeInvoke (setter, obj ?? declaringType, args);
+			setter.Invoke (obj ?? declaringType, args);
 
-			//this.value = value;
-			//haveValue = true;
+			this.value = value;
+			haveValue = true;
 		}
 
 		protected override bool CanEvaluate (EvaluationOptions options)

@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using System;
 using Mono.Debugging.Client;
 using Mono.Debugging.Evaluation;
 
@@ -34,6 +35,23 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 		public override string Resolve (DebuggerSession session, SourceLocation location, string exp)
 		{
 			return exp;
+		}
+
+		public override ValueReference Evaluate (EvaluationContext ctx, string exp, object expectedType)
+		{
+			var asType = expectedType as Type;
+			if (asType == null) {
+				// Cannot do anything.
+			} else if (asType == typeof (string)) {
+				if (exp != null) {
+					exp = exp.Trim ('"');
+				}
+				return LiteralValueReference.CreateObjectLiteral (ctx, exp, exp);
+			} else if (asType.IsPrimitive) {
+				object value = Convert.ChangeType (exp, asType);
+				return LiteralValueReference.CreateObjectLiteral (ctx, exp, value);
+			}
+			return base.Evaluate (ctx, exp, expectedType);
 		}
 	}
 }

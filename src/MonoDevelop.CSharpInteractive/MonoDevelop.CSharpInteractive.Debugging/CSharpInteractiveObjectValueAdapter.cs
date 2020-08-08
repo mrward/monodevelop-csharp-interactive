@@ -58,7 +58,7 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 
 		public override object CreateValue (EvaluationContext ctx, object value)
 		{
-			throw new System.NotImplementedException ();
+			return value;
 		}
 
 		public override object CreateValue (EvaluationContext ctx, object type, params object[] args)
@@ -230,7 +230,11 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 
 		public override object TryCast (EvaluationContext ctx, object val, object type)
 		{
-			throw new System.NotImplementedException ();
+			var asType = type as Type;
+			if (asType == null)
+				return null;
+
+			return System.Convert.ChangeType (val, asType);
 		}
 
 		protected override IEnumerable<ValueReference> GetMembers (
