@@ -25,6 +25,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Linq;
 using System.Reflection;
 using Foundation;
 using Gtk;
@@ -106,7 +107,37 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 
 		public void Inspect (ObjectValue value)
 		{
-			controller.AddValue (value);
+			if (ReplaceExistingNode (value))
+				return;
+
+			var node = new DebuggerObjectValueNode (value);
+			controller.AddValue (node);
+		}
+
+		bool ReplaceExistingNode (ObjectValue value)
+		{
+			int index = FindExistingNodeIndex (value);
+			if (index < 0)
+				return false;
+
+			var existingNode = controller.Root.Children [index];
+			var node = new DebuggerObjectValueNode (value);
+			controller.Root.ReplaceValueAt (index, node);
+
+			treeView.LoadEvaluatedNode (existingNode, new[] { node });
+
+			return true;
+		}
+
+		int FindExistingNodeIndex (ObjectValue value)
+		{
+			for (int i = 0; i < controller.Root.Children.Count; ++i) {
+				ObjectValueNode node = controller.Root.Children [i];
+				if (node.Name == value.Name)
+					return i;
+			}
+
+			return -1;
 		}
 	}
 }
