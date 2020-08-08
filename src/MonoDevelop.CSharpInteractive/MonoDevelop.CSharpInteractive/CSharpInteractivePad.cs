@@ -29,6 +29,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Gtk;
 using Mono.CSharp;
+using Mono.Debugging.Client;
 using MonoDevelop.Components;
 using MonoDevelop.Components.Docking;
 using MonoDevelop.Core;
@@ -215,7 +216,8 @@ namespace MonoDevelop.CSharpInteractive
 
 		void OnInspect (object obj)
 		{
-			var value = ObjectValueCreator.Create (obj);
+			ObjectPath path = obj.GetObjectPath (expression);
+			var value = ObjectValueCreator.Create (obj, path);
 
 			Runtime.RunInMainThread(() => {
 				Pad pad = IdeApp.Workbench.GetPad<ObjectInspectorPad> ();

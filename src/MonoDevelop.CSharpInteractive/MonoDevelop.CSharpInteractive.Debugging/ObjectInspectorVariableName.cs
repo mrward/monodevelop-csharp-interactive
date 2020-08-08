@@ -1,5 +1,5 @@
 ﻿//
-// ObjectValueCreator.cs
+// ObjectInspectorVariableName.cs
 //
 // Author:
 //       Matt Ward <matt.ward@microsoft.com>
@@ -26,43 +26,20 @@
 
 using System;
 using Mono.Debugging.Client;
-using MonoDevelop.Debugger;
 
 namespace MonoDevelop.CSharpInteractive.Debugging
 {
-	static class ObjectValueCreator
+	static class ObjectInspectorVariableName
 	{
-		static readonly CSharpInteractiveObjectValueAdapter objectValueAdapter
-			= new CSharpInteractiveObjectValueAdapter ();
-
-		public static ObjectValue Create (object obj, ObjectPath path)
+		public static ObjectPath GetObjectPath (this object obj, string expression)
 		{
-			var sessionOptions = DebuggingService.GetUserOptions ();
-			var options = sessionOptions.EvaluationOptions;
-			var context = new CSharpInteractiveEvaluationContext (options);
-			context.Adapter = objectValueAdapter;
-			context.Evaluator = new CSharpInteractiveExpressionEvaluator ();
-
-			var source = new CSharpInteractiveObjectValueSource (path.Join ("."), obj, context);
-
-			try {
-				ObjectValue value = objectValueAdapter.CreateObjectValue (context, source, path, obj, ObjectValueFlags.None);
-				AttachStackFrame (value, sessionOptions);
-				return value;
-			} catch (Exception ex) {
-				return ObjectValue.CreateError (null, path, string.Empty, ex.Message, ObjectValueFlags.None);
+			string variableName = ParseInspectParameterName (expression);
+			if (!string.IsNullOrEmpty (variableName)) {
+				return new ObjectPath (variableName);
 			}
-		}
 
-		static void AttachStackFrame (ObjectValue value, DebuggerSessionOptions sessionOptions)
-		{
-			var location = new SourceLocation (string.Empty, "test.cs", 1, 1, 1, 1);
-			var stackFrame = new StackFrame (0, location, "C#", false, true);
-			var session = new CSharpInteractiveDebuggerSession ();
-			session.Run (new DebuggerStartInfo (), sessionOptions);
-
-			stackFrame.Attach (session);
-			stackFrame.ConnectCallbacks (value);
+			Type type = obj?.GetType ();
+			return GetObjectPath (type);
 		}
 
 		static ObjectPath GetObjectPath (Type type)
@@ -71,6 +48,32 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 				return new ObjectPath ("null");
 
 			return new ObjectPath (type.Name);
+		}
+
+		static readonly string InspectMethodName = "Inspect";
+
+		static string ParseInspectParameterName (string expression)
+		{
+			if (string.IsNullOrEmpty (expression))
+				return null;
+
+			int startIndex = expression.IndexOf (InspectMethodName);
+			if (startIndex < 0)
+				return null;
+
+			startIndex += InspectMethodName.Length;
+
+			startIndex = expression.IndexOf ('(', startIndex);
+			if (startIndex < 0)
+				return null;
+
+			startIndex += 1;
+
+			int endIndex = expression.IndexOf (')', startIndex);
+			if (endIndex < 0)
+				return null;
+
+			return expression.Substring (startIndex, endIndex - startIndex);
 		}
 	}
 }

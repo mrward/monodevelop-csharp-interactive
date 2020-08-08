@@ -62,6 +62,7 @@
     <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveEvaluationContext.cs" />
     <Compile Include="Mono.Debugging.Soft\TypeExtensions.cs" />
     <Compile Include="Mono.Debugging.Soft\QualifiedTypeName.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectInspectorVariableName.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />
