@@ -31,7 +31,9 @@ using Gdk;
 using Gtk;
 using Mono.CSharp;
 using MonoDevelop.Components;
+using MonoDevelop.Components.Commands;
 using MonoDevelop.Ide.CodeCompletion;
+using MonoDevelop.Ide.Commands;
 using MonoDevelop.Ide.Editor.Extension;
 
 namespace MonoDevelop.CSharpInteractive
@@ -218,6 +220,21 @@ namespace MonoDevelop.CSharpInteractive
 			if (field != null) {
 				field.SetValue (this, string.Empty);
 			}
+		}
+
+		/// <summary>
+		/// Not sure why Copy command does not work with the keyboard shortcut when copying from the read-only
+		/// text. The copy command in the current input line works. If the currently focused
+		/// window is a TextView then it should work. The Immediate Pad does not have this problem and
+		/// it does not have its own Copy command handler. It seems that the IdeApp.Workebench.RootWindow
+		/// is the TextArea for the text editor not the pad.
+		/// </summary>
+		[CommandHandler (EditCommands.Copy)]
+		void CopyText ()
+		{
+			// This is based on what the DefaultCopyCommandHandler does.
+			var clipboard = Gtk.Clipboard.Get (Gdk.Atom.Intern ("CLIPBOARD", false));
+			TextView.Buffer.CopyClipboard (clipboard);
 		}
 	}
 }
