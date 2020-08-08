@@ -1,6 +1,5 @@
 ﻿<ExtensionModel>
 	<Runtime>
-		<Import assembly="Mono.CSharp.dll" />
 		<Import assembly="MonoDevelop.CSharpInteractive.dll" />
 	</Runtime>
 
