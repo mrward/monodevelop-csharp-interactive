@@ -25,7 +25,6 @@
 // THE SOFTWARE.
 
 using System;
-using System.Linq;
 using System.Reflection;
 using Foundation;
 using Gtk;
@@ -39,7 +38,7 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 {
 	class ObjectInspectorPad : PadContent
 	{
-		readonly ObjectValueTreeViewController controller;
+		readonly ObjectInspectorTreeViewController controller;
 		readonly MacObjectValueTreeView treeView;
 		readonly Control control;
 		readonly PadFontChanger fontChanger;
@@ -48,10 +47,10 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 
 		public ObjectInspectorPad ()
 		{
-			controller = new ObjectValueTreeViewController ();
+			controller = new ObjectInspectorTreeViewController ();
 			controller.AllowEditing = true;
 
-			treeView = controller.GetMacControl (ObjectValueTreeViewFlags.ObjectValuePadFlags);
+			treeView = controller.GetMacTreeView (ObjectValueTreeViewFlags.ObjectValuePadFlags);
 
 			fontChanger = new PadFontChanger (treeView, SetCustomFont);
 
