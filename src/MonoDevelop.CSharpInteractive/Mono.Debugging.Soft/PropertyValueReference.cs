@@ -26,8 +26,9 @@
 
 using System;
 using System.Reflection;
-using Mono.Debugging.Evaluation;
+using System.Runtime.CompilerServices;
 using Mono.Debugging.Client;
+using Mono.Debugging.Evaluation;
 
 namespace Mono.Debugging.Soft
 {
@@ -176,9 +177,9 @@ namespace Mono.Debugging.Soft
 			}
 		}
 
-		//internal string[] GetTupleElementNames ()
-		//{
-		//	return FieldValueReference.GetTupleElementNames (property.GetCustomAttributes (true));
-		//}
+		internal string[] GetTupleElementNames ()
+		{
+			return FieldValueReference.GetTupleElementNames (property.GetCustomAttribute<TupleElementNamesAttribute>());
+		}
 	}
 }

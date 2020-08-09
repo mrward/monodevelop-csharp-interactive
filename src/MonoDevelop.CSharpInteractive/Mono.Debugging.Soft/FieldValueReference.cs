@@ -28,6 +28,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Mono.Debugging.Client;
 using Mono.Debugging.Evaluation;
 
@@ -194,29 +195,20 @@ namespace Mono.Debugging.Soft
 			}
 		}
 
-		//internal string[] GetTupleElementNames ()
-		//{
-		//	return GetTupleElementNames (field.GetCustomAttributes (true));
-		//}
+		internal string[] GetTupleElementNames ()
+		{
+			return GetTupleElementNames (field.GetCustomAttribute<TupleElementNamesAttribute>());
+		}
 
-		//internal static string[] GetTupleElementNames (CustomAttributeDataMirror[] attrs)
-		//{
-		//	var attr = attrs.FirstOrDefault (at => at.Constructor.DeclaringType.Name == "TupleElementNamesAttribute");
-		//	if (attr == null)
-		//		return null;
-		//	var attributeValue = attr.ConstructorArguments.Single ().Value;
-		//	var array = attributeValue as ArrayMirror;
-		//	if (array == null)
-		//		return null;
-		//	var values = array.GetValues (0, array.Length);
-		//	if (!values.Any ())
-		//		return null;
-		//	var result = new string[values.Count];
-		//	for (int i = 0; i < result.Length; i++) {
-		//		if (values[i] is StringMirror s)//other than string is null
-		//			result[i] = s.Value;
-		//	}
-		//	return result;
-		//}
+		internal static string[] GetTupleElementNames (TupleElementNamesAttribute attr)
+		{
+			if (attr == null)
+				return null;
+
+			if (!attr.TransformNames.Any ())
+				return Array.Empty<string> ();
+
+			return attr.TransformNames.ToArray  ();
+		}
 	}
 }

@@ -169,14 +169,14 @@ namespace Mono.Debugging.Soft
 		string[] GetTupleElementNames (IObjectSource source, EvaluationContext ctx)
 		{
 			switch (source) {
-				//case FieldValueReference field:
-				//	if ((field.Type as TypeMirror)?.Name?.StartsWith ("ValueTuple`", StringComparison.Ordinal) != true)
-				//		return null;
-				//	return field.GetTupleElementNames ();
-				//case PropertyValueReference prop:
-				//	if ((prop.Type as TypeMirror)?.Name?.StartsWith ("ValueTuple`", StringComparison.Ordinal) != true)
-				//		return null;
-				//	return prop.GetTupleElementNames ();
+				case FieldValueReference field:
+					if (field.Type.IsValueTuple ())
+						return field.GetTupleElementNames ();
+					return null;
+				case PropertyValueReference prop:
+					if (prop.Type.IsValueTuple ())
+						return prop.GetTupleElementNames ();
+					return null;
 				//case VariableValueReference variable:
 				//	if ((variable.Type as TypeMirror)?.Name?.StartsWith ("ValueTuple`", StringComparison.Ordinal) != true)
 				//		return null;

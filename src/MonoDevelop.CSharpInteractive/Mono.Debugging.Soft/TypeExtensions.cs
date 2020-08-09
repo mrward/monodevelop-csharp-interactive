@@ -131,5 +131,18 @@ namespace Mono.Debugging.Soft
 
 			return type.Name.StartsWith ("<>__AnonType", StringComparison.Ordinal);
 		}
+
+		public static bool IsValueTuple (this object type)
+		{
+			return IsValueTuple (type as Type);
+		}
+
+		public static bool IsValueTuple (this Type type)
+		{
+			if (type == null)
+				return false;
+
+			return type.Name.StartsWith ("ValueTuple`", StringComparison.Ordinal);
+		}
 	}
 }
