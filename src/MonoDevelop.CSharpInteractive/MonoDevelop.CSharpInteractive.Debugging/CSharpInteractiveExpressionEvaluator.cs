@@ -27,6 +27,7 @@
 using System;
 using Mono.Debugging.Client;
 using Mono.Debugging.Evaluation;
+using MonoDevelop.Debugger.VsCodeDebugProtocol;
 
 namespace MonoDevelop.CSharpInteractive.Debugging
 {
@@ -43,13 +44,10 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 			if (asType == null) {
 				// Cannot do anything.
 			} else if (asType == typeof (string)) {
-				if (exp != null) {
-					exp = exp.Trim ('"');
-				}
+				exp = VSCodeObjectSource.Unquote (exp);
 				return LiteralValueReference.CreateObjectLiteral (ctx, exp, exp);
 			} else if (asType.IsPrimitive) {
-				object value = Convert.ChangeType (exp, asType);
-				return LiteralValueReference.CreateObjectLiteral (ctx, exp, value);
+				return LiteralValueReference.CreateObjectLiteral (ctx, exp, exp);
 			}
 			return base.Evaluate (ctx, exp, expectedType);
 		}

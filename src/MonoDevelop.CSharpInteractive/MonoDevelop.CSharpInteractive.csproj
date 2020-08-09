@@ -65,6 +65,7 @@
     <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectInspectorVariableName.cs" />
     <Compile Include="MonoDevelop.Debugger\DebuggerObjectValueNode.cs" />
     <Compile Include="MonoDevelop.Debugger\ObjectValueNodeExtensions.cs" />
+    <Compile Include="MonoDevelop.Debugger.VsCodeDebugProtocol\VSCodeObjectSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />
