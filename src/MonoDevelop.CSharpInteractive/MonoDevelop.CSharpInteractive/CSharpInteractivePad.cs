@@ -45,6 +45,8 @@ namespace MonoDevelop.CSharpInteractive
 		CSharpInteractiveConsoleView view;
 		Evaluator evaluator;
 		LogTextWriter logTextWriter;
+		Button clearButton;
+		Button stopButton;
 
 		public CSharpInteractivePad ()
 		{
@@ -70,17 +72,32 @@ namespace MonoDevelop.CSharpInteractive
 		{
 			DockItemToolbar toolbar = window.GetToolbar (DockPositionType.Right);
 
-			var clearButton = new Button (new ImageView (Ide.Gui.Stock.Broom, IconSize.Menu));
-			clearButton.Clicked += ButtonClearClicked;
+			stopButton = new Button (new ImageView (Ide.Gui.Stock.Stop, IconSize.Menu));
+			stopButton.Clicked += StopButtonClicked;
+			stopButton.TooltipText = GettextCatalog.GetString ("Stop running");
+			IsStopButtonEnabled = false;
+			toolbar.Add (stopButton);
+
+			clearButton = new Button (new ImageView (Ide.Gui.Stock.Broom, IconSize.Menu));
+			clearButton.Clicked += ClearButtonClicked;
 			clearButton.TooltipText = GettextCatalog.GetString ("Clear");
 			toolbar.Add (clearButton);
 
 			toolbar.ShowAll ();
 		}
 
-		void ButtonClearClicked (object sender, EventArgs e)
+		void ClearButtonClicked (object sender, EventArgs e)
 		{
 			view.Clear ();
+		}
+
+		void StopButtonClicked (object sender, EventArgs e)
+		{
+			try {
+				evaluator.Interrupt ();
+			} catch (Exception ex) {
+				LoggingService.LogError ("Could not stop evaluation", ex);
+			}
 		}
 
 		void CreateConsoleView ()
@@ -161,15 +178,24 @@ namespace MonoDevelop.CSharpInteractive
 			}
 
 			Task.Run (() => {
-				using (var consoleOutputWriter = ConsoleOutputTextWriter.Create (logTextWriter)) {
-					expression = Evaluate (expression);
+				try {
+					IsStopButtonEnabled = true;
+
+					using (var consoleOutputWriter = ConsoleOutputTextWriter.Create (logTextWriter)) {
+						expression = Evaluate (expression);
+					}
+				} finally {
+					WritePrompt ();
+					IsStopButtonEnabled = false;
 				}
-				WritePrompt ();
 			}).Ignore ();
 		}
 
 		public override void Dispose ()
 		{
+			stopButton.Clicked -= StopButtonClicked;
+			clearButton.Clicked -= ClearButtonClicked;
+
 			view.ConsoleInput -= OnConsoleInput;
 			IdeApp.Preferences.CustomOutputPadFont.Changed -= OnCustomOutputPadFontChanged;
 			logTextWriter.TextWritten -= LogTextWriterTextWritten;
@@ -241,6 +267,15 @@ namespace MonoDevelop.CSharpInteractive
 
 			var input = new ConsoleInputEventArgs (text);
 			Instance.OnConsoleInput (Instance.view, input);
+		}
+
+		bool IsStopButtonEnabled {
+			get { return stopButton.Sensitive; }
+			set {
+				Runtime.RunInMainThread (() => {
+					stopButton.Sensitive = value;
+				});
+			}
 		}
 	}
 }
