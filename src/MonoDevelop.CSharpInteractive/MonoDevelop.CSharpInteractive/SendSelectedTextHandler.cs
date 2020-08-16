@@ -1,10 +1,10 @@
-//
-// AddinInfo.cs
+﻿//
+// SendSelectedTextHandler.cs
 //
 // Author:
 //       Matt Ward <matt.ward@microsoft.com>
 //
-// Copyright (c) 2020 Microsoft
+// Copyright (c) 2020 Microsoft Corporation
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,19 +24,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Mono.Addins;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
+using MonoDevelop.Components.Commands;
+using MonoDevelop.Ide;
+using MonoDevelop.Ide.Gui;
 
-[assembly:Addin (
-	"CSharpInteractive",
-	Namespace = "MonoDevelop",
-	Version = "0.1",
-	Category = "IDE extensions")]
+namespace MonoDevelop.CSharpInteractive
+{
+	class SendSelectedTextHandler : CommandHandler
+	{
+		protected override void Run ()
+		{
+			Document document = IdeApp.Workbench.ActiveDocument;
+			if (document == null)
+				return;
 
-[assembly:AddinName ("CSharp Interactive")]
-[assembly:AddinDescription ("")]
+			var view = document.GetContent<ITextView> ();
+			if (view == null)
+				return;
 
-[assembly:AddinDependency ("Core", "8.4")]
-[assembly:AddinDependency ("Ide", "8.4")]
-[assembly:AddinDependency ("Debugger", "8.4")]
-[assembly:AddinDependency ("TextEditor", "8.4")]
+			if (view.Selection.IsEmpty) {
+				// Nothing selected send the line instead.
+				ITextSnapshotLine line = view.Caret.Position.BufferPosition.GetContainingLine ();
+				string text = line.GetText ();
 
+				CSharpInteractivePad.EvaluateText (text);
+			} else {
+				foreach (VirtualSnapshotSpan span in view.Selection.VirtualSelectedSpans) {
+					string text = span.GetText ();
+					CSharpInteractivePad.EvaluateText (text);
+				}
+			}
+		}
+	}
+}

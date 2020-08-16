@@ -34,6 +34,22 @@
       <Private>False</Private>
       <HintPath>$(MDBinDir)\System.Collections.Immutable.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.CoreUtility">
+      <Private>False</Private>
+      <HintPath>$(MDBinDir)\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Text.Data">
+      <HintPath>$(MDBinDir)\Microsoft.VisualStudio.Text.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Text.Logic">
+      <HintPath>$(MDBinDir)\Microsoft.VisualStudio.Text.Logic.dll</HintPath>
+      <Private>False</Private>
+   </Reference>
+    <Reference Include="Microsoft.VisualStudio.Text.UI">
+      <HintPath>$(MDBinDir)\Microsoft.VisualStudio.Text.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Xamarin.Mac">
       <Private>False</Private>
       <HintPath>$(MDBinDir)\Xamarin.Mac.dll</HintPath>

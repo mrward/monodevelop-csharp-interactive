@@ -68,6 +68,9 @@
     <Compile Include="MonoDevelop.Debugger.VsCodeDebugProtocol\VSCodeObjectSource.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectInspectorTreeViewController.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectInspectorTreeView.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive\SendSelectedTextHandler.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive\SendLineHandler.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive\SendFileHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />

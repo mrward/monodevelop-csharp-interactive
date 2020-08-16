@@ -48,7 +48,10 @@ namespace MonoDevelop.CSharpInteractive
 
 		public CSharpInteractivePad ()
 		{
+			Instance = this;
 		}
+
+		public static CSharpInteractivePad Instance { get; private set; }
 
 		public override Control Control {
 			get { return view; }
@@ -227,6 +230,17 @@ namespace MonoDevelop.CSharpInteractive
 
 				pad.BringToFront ();
 			}).Ignore();
+		}
+
+		internal static void EvaluateText (string text)
+		{
+			Runtime.AssertMainThread();
+
+			Pad pad = IdeApp.Workbench.GetPad<CSharpInteractivePad> ();
+			pad.BringToFront ();
+
+			var input = new ConsoleInputEventArgs (text);
+			Instance.OnConsoleInput (Instance.view, input);
 		}
 	}
 }

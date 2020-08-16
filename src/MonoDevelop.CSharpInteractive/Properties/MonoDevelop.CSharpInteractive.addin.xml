@@ -12,11 +12,40 @@
 			class="MonoDevelop.CSharpInteractive.CSharpInteractivePad"
 			_label="C# Interactive" />
 		<Pad
-			id="MonoDevelop.CSharpInteractive..ObjectInspectorPad"
+			id="MonoDevelop.CSharpInteractive.ObjectInspectorPad"
 			defaultPlacement="Center Bottom"
 			defaultStatus="AutoHide"
 			icon="md-view-debug-watch"
 			class="MonoDevelop.CSharpInteractive.Debugging.ObjectInspectorPad"
 			_label="Object Inspector" />
+	</Extension>
+
+	<Extension path="/MonoDevelop/Ide/Commands">
+		<Category _name="C# Interactive" id="CSharpInteractive">
+			<Command
+				id="MonoDevelop.CSharpInteractive.Commands.SendSelection"
+				_description="Sends selected text to C# interactive"
+				_label="Send Selection to C# Interactive"
+				defaultHandler="MonoDevelop.CSharpInteractive.SendSelectedTextHandler" />
+			<Command
+				id="MonoDevelop.CSharpInteractive.Commands.SendLine"
+				_description="Sends current line to C# interactive"
+				_label="Send Line to C# Interactive"
+				defaultHandler="MonoDevelop.CSharpInteractive.SendLineHandler" />
+			<Command
+				id="MonoDevelop.CSharpInteractive.Commands.SendFile"
+				_description="Sends current file to C# interactive"
+				_label="Send File to C# Interactive"
+				defaultHandler="MonoDevelop.CSharpInteractive.SendFileHandler" />
+		</Category>
+	</Extension>
+
+	<Extension path = "/MonoDevelop/TextEditor/ContextMenu/Editor">
+		<Condition id="FileType" fileExtensions=".cs,.csx">
+			<SeparatorItem id="CSharpInteractiveSeparatorStart" insertafter="Navigate" />
+			<CommandItem id="MonoDevelop.CSharpInteractive.Commands.SendSelection" />
+			<CommandItem id="MonoDevelop.CSharpInteractive.Commands.SendLine" />
+			<CommandItem id="MonoDevelop.CSharpInteractive.Commands.SendFile" />
+		</Condition>
 	</Extension>
 </ExtensionModel>
