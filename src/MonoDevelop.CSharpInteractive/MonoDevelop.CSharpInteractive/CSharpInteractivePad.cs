@@ -27,10 +27,11 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Gtk;
+using Microsoft.VisualStudio.Components;
 using Mono.CSharp;
 using Mono.Debugging.Client;
 using MonoDevelop.Components;
+using MonoDevelop.Components.Declarative;
 using MonoDevelop.Components.Docking;
 using MonoDevelop.Core;
 using MonoDevelop.Core.ProgressMonitoring;
@@ -42,11 +43,11 @@ namespace MonoDevelop.CSharpInteractive
 {
 	class CSharpInteractivePad : PadContent
 	{
-		CSharpInteractiveConsoleView view;
+		ConsoleViewController controller;
 		Evaluator evaluator;
 		LogTextWriter logTextWriter;
-		Button clearButton;
-		Button stopButton;
+		ToolbarButtonItem clearButton;
+		ToolbarButtonItem stopButton;
 
 		public CSharpInteractivePad ()
 		{
@@ -56,7 +57,7 @@ namespace MonoDevelop.CSharpInteractive
 		public static CSharpInteractivePad Instance { get; private set; }
 
 		public override Control Control {
-			get { return view; }
+			get { return controller.View; }
 		}
 
 		protected override void Initialize (IPadWindow window)
@@ -70,25 +71,31 @@ namespace MonoDevelop.CSharpInteractive
 
 		void CreateToolbar (IPadWindow window)
 		{
-			DockItemToolbar toolbar = window.GetToolbar (DockPositionType.Right);
+			var toolbar = new Toolbar ();
 
-			stopButton = new Button (new ImageView (Ide.Gui.Stock.Stop, IconSize.Menu));
+			stopButton = new ToolbarButtonItem (toolbar.Properties, nameof (stopButton));
+			stopButton.Icon = Stock.Stop;
 			stopButton.Clicked += StopButtonClicked;
-			stopButton.TooltipText = GettextCatalog.GetString ("Stop running");
-			IsStopButtonEnabled = false;
-			toolbar.Add (stopButton);
+			stopButton.Tooltip = GettextCatalog.GetString ("Stop running");
+			toolbar.AddItem (stopButton);
 
-			clearButton = new Button (new ImageView (Ide.Gui.Stock.Broom, IconSize.Menu));
+			clearButton = new ToolbarButtonItem (toolbar.Properties, nameof (clearButton));
+			clearButton.Icon = Stock.Broom;
 			clearButton.Clicked += ClearButtonClicked;
-			clearButton.TooltipText = GettextCatalog.GetString ("Clear");
-			toolbar.Add (clearButton);
+			clearButton.Tooltip = GettextCatalog.GetString ("Clear");
+			toolbar.AddItem (clearButton);
 
-			toolbar.ShowAll ();
+			window.SetToolbar (toolbar, DockPositionType.Right);
+
+			// Workaround being unable to set the button's Enabled state before the underlying
+			// NSView is created. It is created after SetToolbar is called.
+			stopButton.Enabled = false;
+			IsStopButtonEnabled = false;
 		}
 
 		void ClearButtonClicked (object sender, EventArgs e)
 		{
-			view.Clear ();
+			//view.Clear ();
 		}
 
 		void StopButtonClicked (object sender, EventArgs e)
@@ -104,26 +111,25 @@ namespace MonoDevelop.CSharpInteractive
 		{
 			Debug.Assert (evaluator != null);
 
-			view = new CSharpInteractiveConsoleView (evaluator);
+			controller = new ConsoleViewController ();
+			controller.Editable = true;
 
 			OnCustomOutputPadFontChanged (null, EventArgs.Empty);
 
-			view.ConsoleInput += OnConsoleInput;
-			view.ShadowType = Gtk.ShadowType.None;
-			view.ShowAll ();
+			controller.ConsoleInput += OnConsoleInput;
 
 			IdeApp.Preferences.CustomOutputPadFont.Changed += OnCustomOutputPadFontChanged;
 		}
 
 		void OnCustomOutputPadFontChanged (object sender, EventArgs e)
 		{
-			view.SetFont (IdeApp.Preferences.CustomOutputPadFont);
+			//view.SetFont (IdeApp.Preferences.CustomOutputPadFont);
 		}
 
 		void LogTextWriterTextWritten (string writtenText)
 		{
 			Runtime.RunInMainThread (() => {
-				view.WriteOutput (writtenText);
+				controller.WriteOutput (writtenText);
 			});
 		}
 
@@ -150,7 +156,7 @@ namespace MonoDevelop.CSharpInteractive
 		void OnClear ()
 		{
 			Runtime.RunInMainThread (() => {
-				view.ClearWithoutPrompt ();
+				//view.ClearWithoutPrompt ();
 			});
 		}
 
@@ -196,7 +202,7 @@ namespace MonoDevelop.CSharpInteractive
 			stopButton.Clicked -= StopButtonClicked;
 			clearButton.Clicked -= ClearButtonClicked;
 
-			view.ConsoleInput -= OnConsoleInput;
+			controller.ConsoleInput -= OnConsoleInput;
 			IdeApp.Preferences.CustomOutputPadFont.Changed -= OnCustomOutputPadFontChanged;
 			logTextWriter.TextWritten -= LogTextWriterTextWritten;
 		}
@@ -206,7 +212,8 @@ namespace MonoDevelop.CSharpInteractive
 			bool multiline = expression != null;
 
 			Runtime.RunInMainThread (() => {
-				view.Prompt (true, multiline);
+				controller.Prompt ();
+				//view.Prompt (true, multiline);
 			});
 		}
 
@@ -234,7 +241,7 @@ namespace MonoDevelop.CSharpInteractive
 		void WriteLine (string message)
 		{
 			Runtime.RunInMainThread(() => {
-				view.WriteOutput (message + "\n");
+				controller.WriteOutput (message + "\n");
 			});
 		}
 
@@ -266,14 +273,14 @@ namespace MonoDevelop.CSharpInteractive
 			pad.BringToFront ();
 
 			var input = new ConsoleInputEventArgs (text);
-			Instance.OnConsoleInput (Instance.view, input);
+			Instance.OnConsoleInput (Instance.controller, input);
 		}
 
 		bool IsStopButtonEnabled {
-			get { return stopButton.Sensitive; }
+			get { return stopButton.Enabled; }
 			set {
 				Runtime.RunInMainThread (() => {
-					stopButton.Sensitive = value;
+					stopButton.Enabled = value;
 				});
 			}
 		}

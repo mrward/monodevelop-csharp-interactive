@@ -35,8 +35,8 @@ using Mono.Addins;
 [assembly:AddinName ("CSharp Interactive")]
 [assembly:AddinDescription ("")]
 
-[assembly:AddinDependency ("Core", "8.4")]
-[assembly:AddinDependency ("Ide", "8.4")]
-[assembly:AddinDependency ("Debugger", "8.4")]
-[assembly:AddinDependency ("TextEditor", "8.4")]
+[assembly:AddinDependency ("Core", "17.0")]
+[assembly:AddinDependency ("Ide", "17.0")]
+[assembly:AddinDependency ("Debugger", "17.0")]
+[assembly:AddinDependency ("TextEditor", "17.0")]
 

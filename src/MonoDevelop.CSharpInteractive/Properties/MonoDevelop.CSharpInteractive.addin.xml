@@ -1,7 +1,12 @@
 ﻿<ExtensionModel>
 	<Runtime>
 		<Import assembly="MonoDevelop.CSharpInteractive.dll" />
+		<Import file="Mono.CSharp.dll" />
 	</Runtime>
+
+	<Extension path="/MonoDevelop/Ide/Composition">
+		<Assembly file="MonoDevelop.CSharpInteractive.dll"/>
+	</Extension>
 
 	<Extension path="/MonoDevelop/Ide/Pads">
 		<Pad

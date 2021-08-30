@@ -29,12 +29,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gtk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="gdk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="atk-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
     <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="Mono.CSharp" />
+    <Reference Include="System.ComponentModel.Composition" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Mono.CSharp" Version="4.0.0.143" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -44,8 +43,6 @@
     <Compile Include="MonoDevelop.CSharpInteractive\ConsoleViewReportPrinter.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractivePad.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveConsoleView.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveConsoleCompletionWidget.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\CompletionListWindowExtensions.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveBase.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectInspectorPad.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectValueCreator.cs" />
@@ -71,9 +68,21 @@
     <Compile Include="MonoDevelop.CSharpInteractive\SendSelectedTextHandler.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\SendLineHandler.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\SendFileHandler.cs" />
+    <Compile Include="..\..\external\vsmac-console\src\Microsoft.VisualStudio.Components\ConsoleViewCommandHandler.cs">
+      <Link>Microsoft.VisualStudio.Components\ConsoleViewCommandHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\vsmac-console\src\Microsoft.VisualStudio.Components\ConsoleViewController.cs">
+      <Link>Microsoft.VisualStudio.Components\ConsoleViewController.cs</Link>
+    </Compile>
+    <Compile Include="..\..\external\vsmac-console\src\Microsoft.VisualStudio.Components\ConsoleViewReadonlyRegionCommandHandler.cs">
+      <Link>Microsoft.VisualStudio.Components\ConsoleViewReadonlyRegionCommandHandler.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Microsoft.VisualStudio.Components\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

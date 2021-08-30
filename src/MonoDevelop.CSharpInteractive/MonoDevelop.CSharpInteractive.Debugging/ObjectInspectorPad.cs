@@ -27,7 +27,6 @@
 using System;
 using System.Reflection;
 using Foundation;
-using Gtk;
 using Mono.Debugging.Client;
 using MonoDevelop.Components;
 using MonoDevelop.Debugger;
@@ -74,10 +73,7 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 				"transform", NSNull.Null,
 				"bounds", NSNull.Null);
 
-			var host = new GtkNSViewHost (scrolled);
-			host.ShowAll ();
-
-			control = host;
+			control = scrolled;
 		}
 
 		void SetCustomFont (FontDescription font)

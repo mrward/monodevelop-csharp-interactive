@@ -24,7 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System;
+/*using System;
 using System.Diagnostics;
 using System.Reflection;
 using Gdk;
@@ -237,4 +237,4 @@ namespace MonoDevelop.CSharpInteractive
 			TextView.Buffer.CopyClipboard (clipboard);
 		}
 	}
-}
+}*/
