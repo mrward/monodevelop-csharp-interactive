@@ -111,7 +111,8 @@ namespace MonoDevelop.CSharpInteractive
 		{
 			Debug.Assert (evaluator != null);
 
-			controller = new ConsoleViewController ();
+			controller = new ConsoleViewController (nameof (CSharpInteractivePad));
+			controller.TextView.Properties[typeof(Evaluator)] = evaluator;
 			controller.Editable = true;
 
 			OnCustomOutputPadFontChanged (null, EventArgs.Empty);
