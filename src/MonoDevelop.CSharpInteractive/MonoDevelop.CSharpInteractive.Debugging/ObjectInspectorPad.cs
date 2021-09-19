@@ -31,7 +31,7 @@ using Mono.Debugging.Client;
 using MonoDevelop.Components;
 using MonoDevelop.Debugger;
 using MonoDevelop.Ide.Gui;
-using Pango;
+using Xwt.Drawing;
 
 namespace MonoDevelop.CSharpInteractive.Debugging
 {
@@ -76,7 +76,7 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 			control = scrolled;
 		}
 
-		void SetCustomFont (FontDescription font)
+		void SetCustomFont (Font font)
 		{
 			Type type = treeView.GetType ();
 			MethodInfo method = type.GetMethod ("SetCustomFont", BindingFlags.NonPublic | BindingFlags.Instance);
