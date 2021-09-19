@@ -74,7 +74,7 @@
     <Compile Include="..\..\external\vsmac-console\src\Microsoft.VisualStudio.Components\ConsoleViewController.cs">
       <Link>Microsoft.VisualStudio.Components\ConsoleViewController.cs</Link>
     </Compile>
-    <Compile Include="..\..\external\vsmac-console\src\Microsoft.VisualStudio.Components\ConsoleViewReadonlyRegionCommandHandler.cs">
+    <Compile Include="..\..\external\vsmac-console\src\Microsoft.VisualStudio.Components\ConsoleViewReadOnlyRegionCommandHandler.cs">
       <Link>Microsoft.VisualStudio.Components\ConsoleViewReadonlyRegionCommandHandler.cs</Link>
     </Compile>
   </ItemGroup>
