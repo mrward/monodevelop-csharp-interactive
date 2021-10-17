@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveAsyncCompletionSource.cs" />
     <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveAsyncCompletionSourceProvider.cs" />
+    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveTabKeyHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />

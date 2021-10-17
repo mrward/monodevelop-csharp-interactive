@@ -51,13 +51,11 @@ namespace MonoDevelop.CSharpInteractive
 	class CSharpInteractiveAsyncCompletionSource : IAsyncCompletionUniversalSource
 	{
 		readonly ITextView textView;
-		readonly ConsoleViewController controller;
 		readonly Evaluator evaluator;
 
 		public CSharpInteractiveAsyncCompletionSource (ITextView textView)
 		{
 			this.textView = textView;
-			textView.Properties.TryGetProperty (typeof (ConsoleViewController), out controller);
 			textView.Properties.TryGetProperty (typeof (Evaluator), out evaluator);
 		}
 
@@ -71,10 +69,27 @@ namespace MonoDevelop.CSharpInteractive
 			SnapshotSpan applicableToSpan,
 			CancellationToken token)
 		{
-			string text = applicableToSpan.GetText ();
+			throw new NotImplementedException ("GetCompletionContextAsync overload should not be called");
+		}
+
+		public Task<CompletionContext> GetCompletionContextAsync (
+			CompletionTrigger trigger,
+			SnapshotPoint triggerLocation,
+			CancellationToken token)
+		{
+			if (!IsSupported (trigger)) {
+				return Task.FromResult (CompletionContext.Empty);
+			}
+
+			ITextSnapshotLine line = triggerLocation.GetContainingLine ();
+			if (line == null) {
+				return Task.FromResult (CompletionContext.Empty);
+			}
+
+			string text = line.GetText ();
 			string[] completions = TryGetCompletions (text, out string prefix);
 			if (completions == null || completions.Length == 0) {
-				return null;
+				return Task.FromResult (CompletionContext.Empty);
 			}
 
 			SnapshotPoint snapshot = triggerLocation.Subtract (prefix.Length);
@@ -90,33 +105,21 @@ namespace MonoDevelop.CSharpInteractive
 			return Task.FromResult (context);
 		}
 
-		public Task<CompletionContext> GetCompletionContextAsync (
-			CompletionTrigger trigger,
-			SnapshotPoint triggerLocation,
-			CancellationToken token)
+		/// <summary>
+		/// Get completion on pressing tab or when the dot character is typed.
+		/// </summary>
+		static bool IsSupported (CompletionTrigger trigger)
 		{
-			var line = triggerLocation.GetContainingLine ();
-			if (line == null) {
-				return null;
+			if (trigger.Reason == CompletionTriggerReason.InvokeAndCommitIfUnique) {
+				return true;
 			}
 
-			string text = line.GetText ();
-			string[] completions = TryGetCompletions (text, out string prefix);
-			if (completions == null || completions.Length == 0) {
-				return null;
+			if (trigger.Reason == CompletionTriggerReason.Insertion &&
+				trigger.Character == '.') {
+				return true;
 			}
 
-			SnapshotPoint snapshot = triggerLocation.Subtract (prefix.Length);
-			var span = new SnapshotSpan (snapshot, prefix.Length);
-
-			var completionItems = new List<CompletionItem> ();
-			foreach (string completionText in completions) {
-				var item = new CompletionItem (prefix + completionText, this, span);
-				completionItems.Add (item);
-			}
-
-			var context = new CompletionContext (completionItems.ToImmutableArray ());
-			return Task.FromResult (context);
+			return false;
 		}
 
 		public Task<object> GetDescriptionAsync (
@@ -145,18 +148,7 @@ namespace MonoDevelop.CSharpInteractive
 			SnapshotPoint triggerLocation,
 			CancellationToken token)
 		{
-			if (trigger.Reason != CompletionTriggerReason.Insertion) {
-				return new CompletionStartData (CompletionParticipation.DoesNotProvideItems);
-			}
-
-			if (trigger.Character == '\t' || char.IsLetterOrDigit (trigger.Character) || trigger.Character == '.') {
-				var line = triggerLocation.GetContainingLine ();
-				if (line != null) {
-					var snapshotSpan = new SnapshotSpan (line.Start, triggerLocation.Position - line.Start.Position);
-					return new CompletionStartData (CompletionParticipation.ProvidesItems, snapshotSpan);
-				}
-			}
-			return new CompletionStartData (CompletionParticipation.DoesNotProvideItems);
+			throw new NotImplementedException ("InitializeCompletion should not be called");
 		}
 
 		string[] TryGetCompletions (string textToComplete, out string prefix)
