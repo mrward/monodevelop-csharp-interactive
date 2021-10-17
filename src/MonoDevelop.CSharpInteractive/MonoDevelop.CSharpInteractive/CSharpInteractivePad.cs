@@ -95,7 +95,7 @@ namespace MonoDevelop.CSharpInteractive
 
 		void ClearButtonClicked (object sender, EventArgs e)
 		{
-			//view.Clear ();
+			controller.Clear ();
 		}
 
 		void StopButtonClicked (object sender, EventArgs e)
@@ -157,6 +157,7 @@ namespace MonoDevelop.CSharpInteractive
 		void OnClear ()
 		{
 			Runtime.RunInMainThread (() => {
+				controller.Clear ();
 				//view.ClearWithoutPrompt ();
 			});
 		}
