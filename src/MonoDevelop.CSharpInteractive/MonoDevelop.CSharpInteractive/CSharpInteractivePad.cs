@@ -48,6 +48,7 @@ namespace MonoDevelop.CSharpInteractive
 		LogTextWriter logTextWriter;
 		ToolbarButtonItem clearButton;
 		ToolbarButtonItem stopButton;
+		bool onClearCalled;
 
 		public CSharpInteractivePad ()
 		{
@@ -156,6 +157,8 @@ namespace MonoDevelop.CSharpInteractive
 
 		void OnClear ()
 		{
+			onClearCalled = true;
+
 			Runtime.RunInMainThread (() => {
 				controller.Clear ();
 				//view.ClearWithoutPrompt ();
@@ -214,7 +217,10 @@ namespace MonoDevelop.CSharpInteractive
 			bool multiline = expression != null;
 
 			Runtime.RunInMainThread (() => {
-				controller.Prompt ();
+				if (!onClearCalled) {
+					controller.Prompt ();
+				}
+				onClearCalled = false;
 				//view.Prompt (true, multiline);
 			});
 		}
