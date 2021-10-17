@@ -132,7 +132,7 @@ namespace MonoDevelop.CSharpInteractive
 		{
 			Runtime.RunInMainThread (() => {
 				controller.WriteOutput (writtenText);
-			});
+			}).Ignore ();
 		}
 
 		void CreateEvaluator ()
@@ -162,7 +162,7 @@ namespace MonoDevelop.CSharpInteractive
 			Runtime.RunInMainThread (() => {
 				controller.Clear ();
 				//view.ClearWithoutPrompt ();
-			});
+			}).Ignore ();
 		}
 
 		/// <summary>
@@ -222,7 +222,7 @@ namespace MonoDevelop.CSharpInteractive
 				}
 				onClearCalled = false;
 				//view.Prompt (true, multiline);
-			});
+			}).Ignore ();
 		}
 
 		string Evaluate (string input)
@@ -250,7 +250,7 @@ namespace MonoDevelop.CSharpInteractive
 		{
 			Runtime.RunInMainThread(() => {
 				controller.WriteOutput (message + "\n");
-			});
+			}).Ignore ();
 		}
 
 		void WriteLine ()
@@ -270,7 +270,7 @@ namespace MonoDevelop.CSharpInteractive
 				objectInspectorPad.Inspect (value);
 
 				pad.BringToFront ();
-			}).Ignore();
+			}).Ignore ();
 		}
 
 		internal static void EvaluateText (string text)
@@ -289,7 +289,7 @@ namespace MonoDevelop.CSharpInteractive
 			set {
 				Runtime.RunInMainThread (() => {
 					stopButton.Enabled = value;
-				});
+				}).Ignore ();
 			}
 		}
 	}
