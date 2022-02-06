@@ -1,14 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="MonoDevelop.References.props" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{59A2FA2B-CC5B-4FF8-8203-74FBAA567390}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>MonoDevelop.CSharpInteractive</RootNamespace>
-    <AssemblyName>MonoDevelop.CSharpInteractive</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\..\bin</OutputPath>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -28,46 +24,9 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="pango-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <Reference Include="System.ComponentModel.Composition" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Mono.CSharp" Version="4.0.0.143" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\AddinInfo.cs" />
-    <Compile Include="Mono.CSharp\PrettyPrinter.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\ConsoleOutputTextWriter.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\ConsoleViewReportPrinter.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractivePad.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveConsoleView.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveBase.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectInspectorPad.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectValueCreator.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\StackFrameExtensions.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveDebuggerSession.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveExpressionEvaluator.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveObjectValueAdapter.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveObjectValueSource.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ArrayAdapter.cs" />
-    <Compile Include="Mono.Debugging.Soft\MemberResolver.cs" />
-    <Compile Include="Mono.Debugging.Soft\FieldValueReference.cs" />
-    <Compile Include="Mono.Debugging.Soft\FieldReferenceBatch.cs" />
-    <Compile Include="Mono.Debugging.Soft\PropertyValueReference.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\CSharpInteractiveEvaluationContext.cs" />
-    <Compile Include="Mono.Debugging.Soft\TypeExtensions.cs" />
-    <Compile Include="Mono.Debugging.Soft\QualifiedTypeName.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectInspectorVariableName.cs" />
-    <Compile Include="MonoDevelop.Debugger\DebuggerObjectValueNode.cs" />
-    <Compile Include="MonoDevelop.Debugger\ObjectValueNodeExtensions.cs" />
-    <Compile Include="MonoDevelop.Debugger.VsCodeDebugProtocol\VSCodeObjectSource.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectInspectorTreeViewController.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive.Debugging\ObjectInspectorTreeView.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\SendSelectedTextHandler.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\SendLineHandler.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\SendFileHandler.cs" />
     <Compile Include="..\..\external\vsmac-console\src\Microsoft.VisualStudio.Components\ConsoleViewCommandHandler.cs">
       <Link>Microsoft.VisualStudio.Components\ConsoleViewCommandHandler.cs</Link>
     </Compile>
@@ -77,15 +36,8 @@
     <Compile Include="..\..\external\vsmac-console\src\Microsoft.VisualStudio.Components\ConsoleViewReadOnlyRegionCommandHandler.cs">
       <Link>Microsoft.VisualStudio.Components\ConsoleViewReadonlyRegionCommandHandler.cs</Link>
     </Compile>
-    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveAsyncCompletionSource.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveAsyncCompletionSourceProvider.cs" />
-    <Compile Include="MonoDevelop.CSharpInteractive\CSharpInteractiveTabKeyHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Microsoft.VisualStudio.Components\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
