@@ -26,15 +26,10 @@
 
 using System;
 using System.IO;
-using Mono.CSharp;
 
 namespace MonoDevelop.CSharpInteractive
 {
-	/// <summary>
-	/// Has to be public otherwise the evaluator will complain about inconsistent accessibility between
-	/// this class and the InteractiveExpressionClass
-	/// </summary>
-	public class CSharpInteractiveBase
+	class CSharpInteractiveBase
 	{
 		public static TextWriter Output = Console.Out;
 
@@ -60,13 +55,13 @@ namespace MonoDevelop.CSharpInteractive
 
 		public static void ShowVars ()
 		{
-			Output.Write (Evaluator.GetVars ());
+			//Output.Write (Evaluator.GetVars ());
 			Output.Flush ();
 		}
 
 		public static void ShowUsing ()
 		{
-			Output.Write (Evaluator.GetUsing ());
+			//Output.Write (Evaluator.GetUsing ());
 			Output.Flush ();
 		}
 
@@ -79,7 +74,7 @@ namespace MonoDevelop.CSharpInteractive
 
 		public static void LoadAssembly (string assembly)
 		{
-			Evaluator.LoadAssembly (assembly);
+			//Evaluator.LoadAssembly (assembly);
 		}
 
 		public static void print (object obj)
@@ -94,13 +89,14 @@ namespace MonoDevelop.CSharpInteractive
 
 		public static string Describe (object x)
 		{
-			if (x == null) {
-				return "<null>";
-			}
-			Type t = (x as Type) ?? x.GetType ();
-			StringWriter stringWriter = new StringWriter ();
-			new Outline (t, stringWriter, declared_only: true, show_private: false, filter_obsolete: false).OutlineType ();
-			return stringWriter.ToString ();
+			//if (x == null) {
+			//	return "<null>";
+			//}
+			//Type t = (x as Type) ?? x.GetType ();
+			//StringWriter stringWriter = new StringWriter ();
+			//new Outline (t, stringWriter, declared_only: true, show_private: false, filter_obsolete: false).OutlineType ();
+			//return stringWriter.ToString ();
+			return string.Empty;
 		}
 
 		public static void clear ()

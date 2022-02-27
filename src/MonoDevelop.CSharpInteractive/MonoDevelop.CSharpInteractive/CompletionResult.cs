@@ -1,10 +1,10 @@
 ﻿//
-// ConsoleViewReportPrinter.cs
+// CompletionResult.cs
 //
 // Author:
 //       Matt Ward <matt.ward@microsoft.com>
 //
-// Copyright (c) 2020 Microsoft Corporation
+// Copyright (c) 2022 Microsoft Corporation
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,22 +24,47 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using System.IO;
-using Mono.CSharp;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.DotNet.Interactive.Events;
+
 namespace MonoDevelop.CSharpInteractive
 {
-	class ConsoleViewReportPrinter : ReportPrinter
+	class CompletionResult
 	{
-		TextWriter outputWriter;
+		public static readonly CompletionResult None = new CompletionResult ();
 
-		public ConsoleViewReportPrinter (TextWriter outputWriter)
-		{
-			this.outputWriter = outputWriter;
+		public string Prefix { get; private set; } = string.Empty;
+
+		public IEnumerable<CompletionItem> Completions {
+			get {
+				return CompletionsProduced?.Completions ?? Enumerable.Empty<CompletionItem> ();
+			}
 		}
 
-		public override void Print (AbstractMessage msg, bool showFullPath)
+		CompletionsProduced CompletionsProduced { get; set; }
+
+		public static CompletionResult FromCompletionItems (
+			string textToComplete,
+			CompletionsProduced completions)
 		{
-			base.Print (msg, outputWriter, showFullPath);
+			return new CompletionResult {
+				Prefix = GetPrefixAtWordBoundary (textToComplete),
+				CompletionsProduced = completions
+			};
+		}
+
+		static string GetPrefixAtWordBoundary (string textToComplete)
+		{
+			for (int position = textToComplete.Length - 1; position > 0; position--) {
+				char current = textToComplete [position];
+				if (current == '.' || char.IsWhiteSpace (current) || current == '(') {
+					return textToComplete.Substring (position + 1);
+				}
+			}
+
+			return string.Empty;
 		}
 	}
 }
+

@@ -5,9 +5,16 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>..\..\bin</OutputPath>
     <TargetFramework>net6.0</TargetFramework>
+    <NuGetDotNetInteractiveVersion>1.0.0-beta.22103.1</NuGetDotNetInteractiveVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Mono.CSharp" Version="4.0.0.143" />
+    <PackageReference Include="Microsoft.DotNet.Interactive" Version="$(NuGetDotNetInteractiveVersion)" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="$(NuGetDotNetInteractiveVersion)" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.Formatting" Version="$(NuGetDotNetInteractiveVersion)" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.PackageManagement" Version="$(NuGetDotNetInteractiveVersion)" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.2.0" GeneratePathProperty="true" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta3.22101.1" GeneratePathProperty="true" />
+    <PackageReference Include="System.CommandLine.Rendering" Version="0.3.0-alpha.20427.1" GeneratePathProperty="true" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\external\vsmac-console\src\Microsoft.VisualStudio.Components\ConsoleViewCommandHandler.cs">
@@ -23,4 +30,16 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\MonoDevelop.CSharpInteractive.addin.xml" />
   </ItemGroup>
+  <Target Name="__PostBuildLocalCopy" AfterTargets="Build">
+     <ItemGroup>
+       <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_AspNetCore_Html_Abstractions)\lib\netstandard2.0\Microsoft.AspNetCore.Html.Abstractions.dll" />
+       <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive)\lib\netstandard2.1\Microsoft.DotNet.Interactive.dll" />
+       <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive_CSharp)\lib\netstandard2.1\Microsoft.DotNet.Interactive.CSharp.dll" />
+       <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive_Formatting)\lib\netstandard2.0\Microsoft.DotNet.Interactive.Formatting.dll" />
+       <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive_PackageManagement)\lib\netstandard2.1\Microsoft.DotNet.Interactive.PackageManagement.dll" />
+       <_PostBuildLocalCopyItem Include="$(PkgSystem_CommandLine)\lib\netstandard2.0\System.CommandLine.dll" />
+       <_PostBuildLocalCopyItem Include="$(PkgSystem_CommandLine_Rendering)\lib\netstandard2.0\System.CommandLine.Rendering.dll" />
+     </ItemGroup>
+     <Copy SourceFiles="@(_PostBuildLocalCopyItem)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="True" />
+  </Target>
 </Project>

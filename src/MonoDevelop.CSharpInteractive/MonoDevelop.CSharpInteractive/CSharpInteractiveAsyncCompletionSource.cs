@@ -28,6 +28,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.Components;
@@ -72,37 +73,38 @@ namespace MonoDevelop.CSharpInteractive
 			throw new NotImplementedException ("GetCompletionContextAsync overload should not be called");
 		}
 
-		public Task<CompletionContext> GetCompletionContextAsync (
+		public async Task<CompletionContext> GetCompletionContextAsync (
 			CompletionTrigger trigger,
 			SnapshotPoint triggerLocation,
 			CancellationToken token)
 		{
 			if (!IsSupported (trigger)) {
-				return Task.FromResult (CompletionContext.Empty);
+				return CompletionContext.Empty;
 			}
 
 			ITextSnapshotLine line = triggerLocation.GetContainingLine ();
 			if (line == null) {
-				return Task.FromResult (CompletionContext.Empty);
+				return CompletionContext.Empty;
 			}
 
 			string text = line.GetText ();
-			string[] completions = TryGetCompletions (text, out string prefix);
-			if (completions == null || completions.Length == 0) {
-				return Task.FromResult (CompletionContext.Empty);
+			CompletionResult completions = await TryGetCompletionsAsync (text);
+			if (completions == null || !completions.Completions.Any ()) {
+				return CompletionContext.Empty;
 			}
 
+			string prefix = completions.Prefix;
 			SnapshotPoint snapshot = triggerLocation.Subtract (prefix.Length);
 			var span = new SnapshotSpan (snapshot, prefix.Length);
 
 			var completionItems = new List<CompletionItem> ();
-			foreach (string completionText in completions) {
-				var item = new CompletionItem (prefix + completionText, this, span);
+			foreach (var completionItem in completions.Completions) {
+				var item = new CompletionItem (completionItem.InsertText, this, span);
 				completionItems.Add (item);
 			}
 
 			var context = new CompletionContext (completionItems.ToImmutableArray ());
-			return Task.FromResult (context);
+			return context;
 		}
 
 		/// <summary>
@@ -151,14 +153,12 @@ namespace MonoDevelop.CSharpInteractive
 			throw new NotImplementedException ("InitializeCompletion should not be called");
 		}
 
-		string[] TryGetCompletions (string textToComplete, out string prefix)
+		async Task<CompletionResult> TryGetCompletionsAsync (string textToComplete)
 		{
 			try {
-				return evaluator.GetCompletions (textToComplete, out prefix);
+				return await evaluator.GetCompletionsAsync (textToComplete);
 			} catch (Exception ex) {
 				Debug.WriteLine (ex);
-
-				prefix = null;
 				return null;
 			}
 		}

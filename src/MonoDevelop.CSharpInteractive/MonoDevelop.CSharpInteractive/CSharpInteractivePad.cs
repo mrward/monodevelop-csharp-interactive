@@ -26,7 +26,10 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.DotNet.Interactive;
+using Microsoft.DotNet.Interactive.Events;
 using Microsoft.VisualStudio.Components;
 using Mono.CSharp;
 using Mono.Debugging.Client;
@@ -140,14 +143,8 @@ namespace MonoDevelop.CSharpInteractive
 			logTextWriter = new LogTextWriter ();
 			logTextWriter.TextWritten += LogTextWriterTextWritten;
 
-			var settings = new CompilerSettings ();
-			var printer = new ConsoleViewReportPrinter (logTextWriter);
-			var context = new CompilerContext (settings, printer);
-			evaluator = new Evaluator (context);
-			evaluator.DescribeTypeExpressions = true;
-			evaluator.WaitOnTask = true;
+			evaluator = new Evaluator (logTextWriter);
 
-			evaluator.InteractiveBaseClass = typeof (CSharpInteractiveBase);
 			CSharpInteractiveBase.Output = logTextWriter;
 			CSharpInteractiveBase.Error = logTextWriter;
 			CSharpInteractiveBase.Evaluator = evaluator;
@@ -165,12 +162,9 @@ namespace MonoDevelop.CSharpInteractive
 			}).Ignore ();
 		}
 
-		/// <summary>
-		/// Match what 'csharp' does on mono.
-		/// </summary>
 		void InitializeEvaluator ()
 		{
-			Evaluate ("using System; using System.Linq; using System.Collections.Generic; using System.Collections;");
+			//Evaluate ("using System; using System.Linq; using System.Collections.Generic; using System.Collections;");
 		}
 
 		string expression = null;
@@ -188,13 +182,15 @@ namespace MonoDevelop.CSharpInteractive
 				expression += "\n" + e.Text;
 			}
 
-			Task.Run (() => {
+			Task.Run (async () => {
 				try {
 					IsStopButtonEnabled = true;
 
 					using (var consoleOutputWriter = ConsoleOutputTextWriter.Create (logTextWriter)) {
-						expression = Evaluate (expression);
+						expression = await EvaluateAsync (expression);
 					}
+				} catch (Exception ex) {
+					LoggingService.LogError ("Evaluation error", ex);
 				} finally {
 					WritePrompt ();
 					IsStopButtonEnabled = false;
@@ -225,25 +221,23 @@ namespace MonoDevelop.CSharpInteractive
 			}).Ignore ();
 		}
 
-		string Evaluate (string input)
+		async Task<string> EvaluateAsync (string input)
 		{
-			bool result_set;
-			object result;
-
 			try {
-				input = evaluator.Evaluate (input, out result, out result_set);
+				EvaluationResult result = await evaluator.EvaluateAsync (input);
 
-				if (result_set) {
-					PrettyPrinter.PrettyPrint (logTextWriter, result);
+				if (result.HasReturnValue) {
+					PrettyPrinter.PrettyPrint (logTextWriter, result.ReturnValue.Value);
 					WriteLine ();
+				} else if (result.IsIncomplete) {
+					return input;
 				}
+				return null;
 			} catch (Exception ex) {
 				Debug.WriteLine (ex.ToString ());
 
 				return null;
 			}
-
-			return input;
 		}
 
 		void WriteLine (string message)

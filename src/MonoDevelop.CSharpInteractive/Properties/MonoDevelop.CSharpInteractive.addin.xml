@@ -1,7 +1,13 @@
 ﻿<ExtensionModel>
 	<Runtime>
 		<Import assembly="MonoDevelop.CSharpInteractive.dll" />
-		<Import file="Mono.CSharp.dll" />
+		<Import file="Microsoft.AspNetCore.Html.Abstractions.dll" />
+		<Import file="Microsoft.DotNet.Interactive.dll" />
+		<Import file="Microsoft.DotNet.Interactive.CSharp.dll" />
+		<Import file="Microsoft.DotNet.Interactive.Formatting.dll" />
+		<Import file="Microsoft.DotNet.Interactive.PackageManagement.dll" />
+		<Import file="System.CommandLine.dll" />
+		<Import file="System.CommandLine.Rendering.dll" />
 	</Runtime>
 
 	<Extension path="/MonoDevelop/Ide/Composition">
