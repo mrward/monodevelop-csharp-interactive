@@ -53,6 +53,7 @@ namespace MonoDevelop.CSharpInteractive
 		{
 			kernel = new CSharpKernel ();
 			kernel.AddHelpCommand (writer);
+			kernel.AddClearCommand ();
 
 			Formatter.DefaultMimeType = PlainTextFormatter.MimeType;
 		}

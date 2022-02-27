@@ -149,10 +149,7 @@ namespace MonoDevelop.CSharpInteractive
 
 			evaluator = new Evaluator (logTextWriter);
 
-			CSharpInteractiveBase.Output = logTextWriter;
-			CSharpInteractiveBase.Error = logTextWriter;
-			CSharpInteractiveBase.Evaluator = evaluator;
-			CSharpInteractiveBase.OnClear = OnClear;
+			ClearCommandHandler.OnClear = OnClear;
 			CSharpInteractiveBase.OnInspect = OnInspect;
 		}
 
