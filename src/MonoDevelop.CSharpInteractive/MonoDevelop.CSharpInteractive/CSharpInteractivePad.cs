@@ -214,7 +214,7 @@ namespace MonoDevelop.CSharpInteractive
 
 			Runtime.RunInMainThread (() => {
 				if (!onClearCalled) {
-					controller.Prompt ();
+					controller.Prompt (false);
 				}
 				onClearCalled = false;
 				//view.Prompt (true, multiline);
