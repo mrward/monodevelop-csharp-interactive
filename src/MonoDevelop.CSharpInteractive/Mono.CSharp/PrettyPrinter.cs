@@ -100,7 +100,7 @@ namespace Mono.CSharp
 					case '\b':
 						output.Write ("\\b"); break;
 					case '\n':
-						output.Write ("\n");
+						output.Write ("\\n");
 						break;
 
 					case '\v':
