@@ -54,6 +54,7 @@ namespace MonoDevelop.CSharpInteractive
 			kernel = new CSharpKernel ();
 			kernel.AddHelpCommand (writer);
 			kernel.AddClearCommand ();
+			kernel.AddInspectCommand (writer);
 
 			Formatter.DefaultMimeType = PlainTextFormatter.MimeType;
 		}
@@ -101,7 +102,6 @@ namespace MonoDevelop.CSharpInteractive
 				return CompletionResult.FromCompletionItems (textToComplete, completionsProduced);
 			}
 		}
-
 
 		void OnEvent (KernelEvent e)
 		{

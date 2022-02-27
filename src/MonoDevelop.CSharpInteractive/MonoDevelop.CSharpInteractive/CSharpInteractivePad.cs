@@ -150,7 +150,7 @@ namespace MonoDevelop.CSharpInteractive
 			evaluator = new Evaluator (logTextWriter);
 
 			ClearCommandHandler.OnClear = OnClear;
-			CSharpInteractiveBase.OnInspect = OnInspect;
+			InspectCommandHandler.OnInspect = OnInspect;
 		}
 
 		void OnClear ()

@@ -14,6 +14,7 @@
     <PackageReference Include="Microsoft.DotNet.Interactive.PackageManagement" Version="$(NuGetDotNetInteractiveVersion)" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.2.0" GeneratePathProperty="true" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta3.22101.1" GeneratePathProperty="true" />
+    <PackageReference Include="System.CommandLine.NamingConventionBinder" Version="2.0.0-beta3.22101.1" GeneratePathProperty="true" />
     <PackageReference Include="System.CommandLine.Rendering" Version="0.3.0-alpha.20427.1" GeneratePathProperty="true" />
   </ItemGroup>
   <ItemGroup>
@@ -38,6 +39,7 @@
        <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive_Formatting)\lib\netstandard2.0\Microsoft.DotNet.Interactive.Formatting.dll" />
        <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive_PackageManagement)\lib\netstandard2.1\Microsoft.DotNet.Interactive.PackageManagement.dll" />
        <_PostBuildLocalCopyItem Include="$(PkgSystem_CommandLine)\lib\netstandard2.0\System.CommandLine.dll" />
+       <_PostBuildLocalCopyItem Include="$(PkgSystem_CommandLine_NamingConventionBinder)\lib\netstandard2.0\System.CommandLine.NamingConventionBinder.dll" />
        <_PostBuildLocalCopyItem Include="$(PkgSystem_CommandLine_Rendering)\lib\netstandard2.0\System.CommandLine.Rendering.dll" />
      </ItemGroup>
      <Copy SourceFiles="@(_PostBuildLocalCopyItem)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="True" />

@@ -7,6 +7,7 @@
 		<Import file="Microsoft.DotNet.Interactive.Formatting.dll" />
 		<Import file="Microsoft.DotNet.Interactive.PackageManagement.dll" />
 		<Import file="System.CommandLine.dll" />
+		<Import file="System.CommandLine.NamingConventionBinder.dll" />
 		<Import file="System.CommandLine.Rendering.dll" />
 	</Runtime>
 
