@@ -117,6 +117,10 @@ namespace MonoDevelop.CSharpInteractive
 
 			controller = new ConsoleViewController (nameof (CSharpInteractivePad));
 			controller.TextView.Properties[typeof(Evaluator)] = evaluator;
+
+			string message = GettextCatalog.GetString ("Type \"#!help\" to see available commands.");
+			controller.WriteOutput (message + "\n");
+
 			controller.Editable = true;
 
 			OnCustomOutputPadFontChanged (null, EventArgs.Empty);
