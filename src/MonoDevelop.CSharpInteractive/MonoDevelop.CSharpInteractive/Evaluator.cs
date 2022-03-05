@@ -27,6 +27,7 @@
 using System;
 using System.IO;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.DotNet.Interactive;
 using Microsoft.DotNet.Interactive.Commands;
@@ -41,6 +42,7 @@ namespace MonoDevelop.CSharpInteractive
 		CSharpKernel kernel;
 		TextWriter writer;
 		ReturnValueProduced returnValueProduced;
+		CancellationTokenSource evaluationCancellationTokenSource;
 
 		public Evaluator (TextWriter writer)
 		{
@@ -61,7 +63,10 @@ namespace MonoDevelop.CSharpInteractive
 
 		public void Interrupt ()
 		{
-			throw new NotImplementedException ();
+			var cancellationTokenSource = evaluationCancellationTokenSource;
+			if (cancellationTokenSource != null) {
+				cancellationTokenSource.Cancel ();
+			}
 		}
 
 		public async Task<EvaluationResult> EvaluateAsync (string input)
@@ -73,13 +78,23 @@ namespace MonoDevelop.CSharpInteractive
 				return EvaluationResult.FromIncompleteSubmission (input);
 			}
 
-			using (IDisposable subscription = kernel.KernelEvents.Subscribe (e => OnEvent (e))) {
-				await kernel.SubmitCodeAsync (input);
+			evaluationCancellationTokenSource = new CancellationTokenSource ();
 
-				if (returnValueProduced != null) {
-					return EvaluationResult.FromReturnValue (returnValueProduced);
+			try {
+				var command = new SubmitCode (input);
+
+				using (IDisposable subscription = kernel.KernelEvents.Subscribe (e => OnEvent (e))) {
+					await kernel.SendAsync (command, evaluationCancellationTokenSource.Token);
+
+					if (returnValueProduced != null) {
+						return EvaluationResult.FromReturnValue (returnValueProduced);
+					}
+					return new EvaluationResult ();
 				}
-				return new EvaluationResult ();
+			} catch (OperationCanceledException) {
+				return EvaluationResult.FromCancelledRequest ();
+			} finally {
+				evaluationCancellationTokenSource = null;
 			}
 		}
 

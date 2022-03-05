@@ -34,7 +34,7 @@ namespace MonoDevelop.CSharpInteractive
 		{
 		}
 
-		public static EvaluationResult FromIncompleteSubmission (string code)
+		internal static EvaluationResult FromIncompleteSubmission (string code)
 		{
 			return new EvaluationResult {
 				IsIncomplete = true,
@@ -49,6 +49,13 @@ namespace MonoDevelop.CSharpInteractive
 			};
 		}
 
+		internal static EvaluationResult FromCancelledRequest ()
+		{
+			return new EvaluationResult {
+				Cancelled = true
+			};
+		}
+
 		public bool IsIncomplete { get; private set; }
 
 		public string IncompleteCode { get; private set; }
@@ -58,6 +65,8 @@ namespace MonoDevelop.CSharpInteractive
 		}
 
 		public ReturnValueProduced ReturnValue { get; private set; }
+
+		public bool Cancelled { get; private set; }
 	}
 }
 
