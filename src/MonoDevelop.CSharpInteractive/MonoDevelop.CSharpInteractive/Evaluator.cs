@@ -54,9 +54,13 @@ namespace MonoDevelop.CSharpInteractive
 		void Initialize ()
 		{
 			kernel = new CSharpKernel ();
-			kernel.AddHelpCommand (writer);
 			kernel.AddClearCommand ();
 			kernel.AddInspectCommand (writer);
+
+			// Not using built-in who command since this uses html formatting.
+			kernel.AddWhoCommand (writer);
+
+			kernel.AddHelpCommand (writer);
 
 			Formatter.DefaultMimeType = PlainTextFormatter.MimeType;
 		}
