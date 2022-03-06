@@ -49,12 +49,25 @@ namespace MonoDevelop.CSharpInteractive.Commands
 		{
 			kernel.VisitSubkernelsAndSelf (currentKernel => {
 				foreach (Command command in currentKernel.Directives.Where (d => !d.IsHidden)) {
+					if (command.Name == "#!inspect") {
+						DisplayReferenceCommandHelpText ();
+					}
+
 					string helpText = GetCommandHelpText (command);
 					outputWriter.WriteLine (helpText);
 				}
 			});
 
 			return Task.FromResult (0);
+		}
+
+		void DisplayReferenceCommandHelpText ()
+		{
+			// #!r command seems to work without using Kernel.AddNugetDirectives.
+			// However this is not a command registered with the kernel, presumably
+			// supported by Roslyn itself. Show help text for this command.
+
+			outputWriter.WriteLine ("#r - Add a metadata reference to specified assembly and all its dependencies, e.g. #r \"myLib.dll\"");
 		}
 
 		static string GetCommandHelpText (Command command)
