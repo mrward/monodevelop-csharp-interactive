@@ -56,6 +56,7 @@ namespace MonoDevelop.CSharpInteractive
 			kernel = new CSharpKernel ();
 			kernel.AddClearCommand ();
 			kernel.AddInspectCommand (writer);
+			kernel.AddUsingsCommand (writer);
 
 			// Not using built-in who command since this uses html formatting.
 			kernel.AddWhoCommand (writer);
