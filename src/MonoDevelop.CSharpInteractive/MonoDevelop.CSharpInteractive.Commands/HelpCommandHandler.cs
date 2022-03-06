@@ -32,7 +32,7 @@ using System.Threading.Tasks;
 using Microsoft.DotNet.Interactive;
 using Microsoft.VisualStudio.UI;
 
-namespace MonoDevelop.CSharpInteractive
+namespace MonoDevelop.CSharpInteractive.Commands
 {
 	class HelpCommandHandler : ICommandHandler
 	{

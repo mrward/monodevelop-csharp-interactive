@@ -34,6 +34,7 @@ using Microsoft.DotNet.Interactive.Commands;
 using Microsoft.DotNet.Interactive.CSharp;
 using Microsoft.DotNet.Interactive.Events;
 using Microsoft.DotNet.Interactive.Formatting;
+using MonoDevelop.CSharpInteractive.Commands;
 
 namespace MonoDevelop.CSharpInteractive
 {

@@ -35,7 +35,7 @@ using Microsoft.DotNet.Interactive.Commands;
 using Microsoft.DotNet.Interactive.Events;
 using Microsoft.VisualStudio.UI;
 
-namespace MonoDevelop.CSharpInteractive
+namespace MonoDevelop.CSharpInteractive.Commands
 {
 	class InspectCommandHandler
 	{

@@ -42,7 +42,7 @@ using Microsoft.DotNet.Interactive.ValueSharing;
 using Mono.CSharp;
 using MonoDevelop.Core;
 
-namespace MonoDevelop.CSharpInteractive
+namespace MonoDevelop.CSharpInteractive.Commands
 {
 	class WhoCommandHandler : ICommandHandler
 	{

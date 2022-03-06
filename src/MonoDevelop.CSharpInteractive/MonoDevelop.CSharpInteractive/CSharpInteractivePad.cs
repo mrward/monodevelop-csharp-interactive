@@ -26,10 +26,7 @@
 
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.DotNet.Interactive;
-using Microsoft.DotNet.Interactive.Events;
 using Microsoft.VisualStudio.Components;
 using Mono.CSharp;
 using Mono.Debugging.Client;
@@ -38,6 +35,7 @@ using MonoDevelop.Components.Declarative;
 using MonoDevelop.Components.Docking;
 using MonoDevelop.Core;
 using MonoDevelop.Core.ProgressMonitoring;
+using MonoDevelop.CSharpInteractive.Commands;
 using MonoDevelop.CSharpInteractive.Debugging;
 using MonoDevelop.Ide;
 using MonoDevelop.Ide.Gui;

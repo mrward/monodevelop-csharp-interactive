@@ -1,5 +1,5 @@
 ﻿//
-// UsingsCommandHandler.cs
+// ClearCommandHandler.cs
 //
 // Author:
 //       Matt Ward <matt.ward@microsoft.com>
@@ -27,57 +27,30 @@
 using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using System.IO;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.DotNet.Interactive;
 using Microsoft.VisualStudio.UI;
 
-namespace MonoDevelop.CSharpInteractive
+namespace MonoDevelop.CSharpInteractive.Commands
 {
-	class UsingsCommandHandler : ICommandHandler
+	class ClearCommandHandler : ICommandHandler
 	{
-		readonly TextWriter outputTextWriter;
-
-		public UsingsCommandHandler (TextWriter outputTextWriter)
-		{
-			this.outputTextWriter = outputTextWriter;
-		}
+		public static Action OnClear = () => { };
 
 		public Task<int> InvokeAsync (InvocationContext context)
 		{
-			var kernelContext = context.BindingContext.GetService (typeof (KernelInvocationContext)) as KernelInvocationContext;
-
-			if (kernelContext == null) {
-				return Task.FromResult (0);
-			}
-
-			ScriptOptions scriptOptions = kernelContext.HandlingKernel.GetScriptOptions ();
-			if (scriptOptions != null) {
-				DisplayUsings (scriptOptions);
-			} else {
-				string message = GettextCatalog.GetString ("Unable to access Roslyn's ScriptOptions to find usings");
-				outputTextWriter.WriteLine (message);
-			}
-
+			OnClear ();
 			return Task.FromResult (0);
-		}
-
-		void DisplayUsings (ScriptOptions scriptOptions)
-		{
-			foreach (string import in scriptOptions.Imports) {
-				outputTextWriter.WriteLine ("using {0};", import);
-			}
 		}
 	}
 
-	static class KernelExtensions_UsingsCommand
+	static class KernelExtensions_ClearCommand
 	{
-		public static T AddUsingsCommand<T> (this T kernel, TextWriter outputTextWriter)
+		public static T AddClearCommand<T> (this T kernel)
 			where T : Kernel
 		{
-			var command = new Command ("#!using", GettextCatalog.GetString ("Show active using declarations"));
-			command.Handler = new UsingsCommandHandler (outputTextWriter);
+			var command = new Command ("#!clear", GettextCatalog.GetString ("Clears the output"));
+			command.Handler = new ClearCommandHandler ();
 
 			kernel.AddDirective (command);
 
