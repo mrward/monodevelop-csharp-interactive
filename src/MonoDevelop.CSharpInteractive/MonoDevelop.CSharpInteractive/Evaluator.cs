@@ -81,6 +81,8 @@ namespace MonoDevelop.CSharpInteractive
 		{
 			returnValueProduced = null;
 
+			input = PreprocessInput (input);
+
 			bool completeCode = await kernel.IsCompleteSubmissionAsync (input);
 			if (!completeCode) {
 				return EvaluationResult.FromIncompleteSubmission (input);
@@ -104,6 +106,23 @@ namespace MonoDevelop.CSharpInteractive
 			} finally {
 				evaluationCancellationTokenSource = null;
 			}
+		}
+
+		string PreprocessInput (string input)
+		{
+			const string addMetadataReferenceDirective = "#!r ";
+
+			int index = input.IndexOf (addMetadataReferenceDirective);
+			if (index < 0) {
+				return input;
+			}
+
+			string text = input.Substring (0, index).TrimStart ();
+			if (!string.IsNullOrEmpty (text)) {
+				return input;
+			}
+
+			return "#r " + input.Substring (index + addMetadataReferenceDirective.Length);
 		}
 
 		public async Task<CompletionResult> GetCompletionsAsync (string textToComplete)

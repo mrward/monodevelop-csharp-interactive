@@ -67,7 +67,7 @@ namespace MonoDevelop.CSharpInteractive.Commands
 			// However this is not a command registered with the kernel, presumably
 			// supported by Roslyn itself. Show help text for this command.
 
-			outputWriter.WriteLine ("#r - Add a metadata reference to specified assembly and all its dependencies, e.g. #r \"myLib.dll\"");
+			outputWriter.WriteLine ("#!r - Add a metadata reference to specified assembly and all its dependencies, e.g. #r \"myLib.dll\"");
 		}
 
 		static string GetCommandHelpText (Command command)
