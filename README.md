@@ -2,13 +2,13 @@
 
 Provides a C# REPL to interact with the IDE.
 
-Uses the Mono.CSharp library:
+Uses the .NET Interactive library:
 
-https://www.mono-project.com/docs/about-mono/languages/csharp/
+https://github.com/dotnet/interactive
 
-Mono REPL:
+Which is used by dotnet repl:
 
-https://www.mono-project.com/docs/tools+libraries/tools/repl/
+https://github.com/jonsequitur/dotnet-repl
 
 # C# Interactive window
 
