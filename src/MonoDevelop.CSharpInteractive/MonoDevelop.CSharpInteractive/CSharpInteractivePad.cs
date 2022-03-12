@@ -67,8 +67,6 @@ namespace MonoDevelop.CSharpInteractive
 			CreateToolbar (window);
 			CreateEvaluator ();
 			CreateConsoleView ();
-
-			InitializeEvaluator ();
 		}
 
 		void CreateToolbar (IPadWindow window)
@@ -120,6 +118,7 @@ namespace MonoDevelop.CSharpInteractive
 			controller.WriteOutput (message + "\n");
 
 			controller.Editable = true;
+			controller.Prompt (newLine: false);
 
 			OnCustomOutputPadFontChanged (null, EventArgs.Empty);
 
@@ -157,13 +156,8 @@ namespace MonoDevelop.CSharpInteractive
 
 			Runtime.RunInMainThread (() => {
 				controller.Clear ();
-				//view.ClearWithoutPrompt ();
+				controller.Prompt (newLine: false);
 			}).Ignore ();
-		}
-
-		void InitializeEvaluator ()
-		{
-			//Evaluate ("using System; using System.Linq; using System.Collections.Generic; using System.Collections;");
 		}
 
 		string expression = null;
@@ -213,10 +207,9 @@ namespace MonoDevelop.CSharpInteractive
 
 			Runtime.RunInMainThread (() => {
 				if (!onClearCalled) {
-					controller.Prompt (false);
+					controller.Prompt (newLine: true, multiLine: multiline);
 				}
 				onClearCalled = false;
-				//view.Prompt (true, multiline);
 			}).Ignore ();
 		}
 
@@ -227,7 +220,6 @@ namespace MonoDevelop.CSharpInteractive
 
 				if (result.HasReturnValue) {
 					PrettyPrinter.PrettyPrint (logTextWriter, result.ReturnValue.Value);
-					WriteLine ();
 				} else if (result.IsIncomplete) {
 					return input;
 				}
