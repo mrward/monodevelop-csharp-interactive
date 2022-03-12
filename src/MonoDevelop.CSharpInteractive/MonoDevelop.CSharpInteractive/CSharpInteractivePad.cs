@@ -207,7 +207,7 @@ namespace MonoDevelop.CSharpInteractive
 
 			Runtime.RunInMainThread (() => {
 				if (!onClearCalled) {
-					controller.Prompt (newLine: true, multiLine: multiline);
+					controller.Prompt (newLine: false, multiLine: multiline);
 				}
 				onClearCalled = false;
 			}).Ignore ();
@@ -220,6 +220,7 @@ namespace MonoDevelop.CSharpInteractive
 
 				if (result.HasReturnValue) {
 					PrettyPrinter.PrettyPrint (logTextWriter, result.ReturnValue.Value);
+					WriteLine ();
 				} else if (result.IsIncomplete) {
 					return input;
 				}
