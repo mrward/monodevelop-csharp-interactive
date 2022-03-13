@@ -96,6 +96,7 @@ namespace MonoDevelop.CSharpInteractive
 		void ClearButtonClicked (object sender, EventArgs e)
 		{
 			controller.Clear ();
+			controller.Prompt (newLine: false);
 		}
 
 		void StopButtonClicked (object sender, EventArgs e)
