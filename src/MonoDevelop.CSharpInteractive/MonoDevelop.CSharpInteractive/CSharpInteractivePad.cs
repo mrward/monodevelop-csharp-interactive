@@ -27,6 +27,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using AppKit;
 using Microsoft.VisualStudio.Components;
 using Mono.CSharp;
 using Mono.Debugging.Client;
@@ -60,6 +61,14 @@ namespace MonoDevelop.CSharpInteractive
 
 		public override Control Control {
 			get { return controller.View; }
+		}
+
+		public override void FocusPad ()
+		{
+			if (controller != null) {
+				NSView cocoaTextViewControl = controller.TextView.VisualElement;
+				cocoaTextViewControl.Window?.MakeFirstResponder(cocoaTextViewControl);
+			}
 		}
 
 		protected override void Initialize (IPadWindow window)
