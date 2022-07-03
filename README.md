@@ -14,23 +14,15 @@ https://github.com/jonsequitur/dotnet-repl
 
 From the View menu select Pads - C# Interactive.
 
-The C# Interactive window provides access to the Mono C# REPL.
+The C# Interactive window provides access to the C# REPL.
 The REPL is run in process with the IDE so you can access and interact
 with types running in the IDE.
 
 ![C# Interactive window](doc/images/CSharpInteractiveWindow.png)
 
-The REPL includes two extra commands which are not available in the
-Mono C# REPL by default:
-
-  - clear()
-     - Clears the C# interactive window
-  - Inspect(object)
-     - Displays the object in the Object Inspector window
-
 # Object Inspector window
 
-From the C# REPL window when you use the `Inspect` method the
+From the C# REPL window when you use the `#!inspect` method the
 object passed will be open int the Object Inspector window.
 
 ![Object Inpsector window](doc/images/ObjectInspectorWindow.png)
