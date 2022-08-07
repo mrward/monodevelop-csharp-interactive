@@ -29,7 +29,7 @@ using Mono.Addins;
 [assembly:Addin (
 	"CSharpInteractive",
 	Namespace = "MonoDevelop",
-	Version = "0.3",
+	Version = "0.4",
 	Category = "IDE extensions")]
 
 [assembly:AddinName ("CSharp Interactive")]
