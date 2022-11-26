@@ -24,6 +24,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+using AppKit;
 using System;
 using System.Reflection;
 using Foundation;
@@ -76,7 +77,7 @@ namespace MonoDevelop.CSharpInteractive.Debugging
 			control = scrolled;
 		}
 
-		void SetCustomFont (Font font)
+		void SetCustomFont (NSFont font)
 		{
 			Type type = treeView.GetType ();
 			MethodInfo method = type.GetMethod ("SetCustomFont", BindingFlags.NonPublic | BindingFlags.Instance);
