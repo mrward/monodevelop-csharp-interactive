@@ -4,6 +4,7 @@
 		<Import file="Microsoft.AspNetCore.Html.Abstractions.dll" />
 		<Import file="Microsoft.DotNet.Interactive.dll" />
 		<Import file="Microsoft.DotNet.Interactive.CSharp.dll" />
+		<Import file="Microsoft.DotNet.Interactive.Documents.dll" />
 		<Import file="Microsoft.DotNet.Interactive.Formatting.dll" />
 		<Import file="Microsoft.DotNet.Interactive.PackageManagement.dll" />
 		<Import file="System.CommandLine.dll" />

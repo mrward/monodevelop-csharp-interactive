@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.Interactive" Version="$(NuGetDotNetInteractiveVersion)" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.DotNet.Interactive.CSharp" Version="$(NuGetDotNetInteractiveVersion)" GeneratePathProperty="true" />
+    <PackageReference Include="Microsoft.DotNet.Interactive.Documents" Version="$(NuGetDotNetInteractiveVersion)" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.DotNet.Interactive.Formatting" Version="$(NuGetDotNetInteractiveVersion)" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.DotNet.Interactive.PackageManagement" Version="$(NuGetDotNetInteractiveVersion)" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.2.0" GeneratePathProperty="true" />
@@ -39,6 +40,7 @@
        <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_AspNetCore_Html_Abstractions)\lib\netstandard2.0\Microsoft.AspNetCore.Html.Abstractions.dll" />
        <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive)\lib\netstandard2.1\Microsoft.DotNet.Interactive.dll" />
        <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive_CSharp)\lib\netstandard2.1\Microsoft.DotNet.Interactive.CSharp.dll" />
+       <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive_Documents)\lib\netstandard2.0\Microsoft.DotNet.Interactive.Documents.dll" />
        <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive_Formatting)\lib\netstandard2.0\Microsoft.DotNet.Interactive.Formatting.dll" />
        <_PostBuildLocalCopyItem Include="$(PkgMicrosoft_DotNet_Interactive_PackageManagement)\lib\netstandard2.1\Microsoft.DotNet.Interactive.PackageManagement.dll" />
        <_PostBuildLocalCopyItem Include="$(PkgSystem_CommandLine)\lib\netstandard2.0\System.CommandLine.dll" />
